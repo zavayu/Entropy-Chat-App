@@ -11,7 +11,7 @@ const SignUpPage = () => {
   });
 
   return (
-    <div className="min-h-full h-dvh grid grid-rows-2 justify-center items-center bg-blue-200">
+    <div className="h-dvh min-h-max grid gap-4 sm:gap-2 justify-center items-center bg-blue-200">
 
       {/*Logo and Welcome Message:*/}
       <div className="mt-24 grid justify-center items-center text-center">
@@ -21,7 +21,7 @@ const SignUpPage = () => {
       </div>
 
       {/*Sign Up Form:*/}
-      <div className="card card-normal bg-base-100 w-96 shadow-2xl mb-24">
+      <div className="card card-normal bg-base-100 w-72 sm:w-96 shadow-2xl mb-24">
         <div className="card-body">
           <form onSubmit={""} className="gap-6">  {/*Needs Backend Here*/}
 
@@ -93,7 +93,7 @@ const SignUpPage = () => {
             <button type="submit" className="btn btn-primary w-full mt-4 mb-2">Create Account</button>
 
             <div className="text-center">
-              <p className="text-base-content/60">
+              <p className="text-base-content/60 text-sm sm:text-base">
                 Already have an account?{" "}
                 <Link to="/login" className="link link-primary">
                   Sign in
