@@ -2,7 +2,7 @@ import React from 'react'
 
 const ChatsList = () => {
   return (
-    <div className="max-w-72 bg-lightblue-50 min-h-max h-dvh justify-center hidden sm:inline px-4 border-r-4">
+    <div className="bg-lightblue-50 min-h-max h-dvh justify-center hidden sm:inline px-4 border-r-4">
 
       <h2 className="text-5xl font-bold py-8 pl-2">Chats</h2>
 

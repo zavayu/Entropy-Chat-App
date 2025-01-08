@@ -6,6 +6,7 @@ import { Navigate, Routes, Route } from "react-router-dom"
 import { useAuthStore } from "./store/useAuthStore"
 import { useEffect } from "react"
 import {Toaster} from "react-hot-toast"
+import ContactsPage from "./pages/ContactsPage"
 
 const App = () => {
   const {authUser, checkAuth} = useAuthStore();
@@ -21,6 +22,7 @@ const App = () => {
         <Route path="/signup" element={!authUser ? <SignUpPage /> : <Navigate to="/"/>} />
         <Route path="/login" element={!authUser ? <LoginPage /> : <Navigate to="/"/>} />
         <Route path="/profile" element={authUser ? <ProfilePage /> : <Navigate to="/login"/>} />
+        <Route path="/contacts" element={authUser ? <ContactsPage /> : <Navigate to="/login"/>} />
       </Routes>
       <Toaster/>
     </div>

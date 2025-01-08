@@ -5,7 +5,7 @@ import ChatsList from '../components/ChatsList';
 
 const HomePage = () => {
   return (
-    <div className="flex">
+    <div className="flex bg-lightblue-100">
       <Sidebar/>
       <ChatsList/>
       <MessageContainer/>

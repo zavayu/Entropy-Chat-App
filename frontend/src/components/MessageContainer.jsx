@@ -2,22 +2,15 @@ import React from 'react'
 import { Link } from 'react-router-dom';
 const MessageContainer = () => {
   return (
-    <div className="w-full bg-lightblue-100 min-h-max h-dvh justify-center hidden sm:inline px-6">
-      Message Container
-      <br />
-      <Link to={"/signup"} className="link link-primary">
-        SIGNUP!!
-      </Link>
-      <br />
-      <Link to={"/login"} className="link link-primary">
-        LOGIN!!
-      </Link>
-      <br />
-      <Link to={"/logout"} className="link link-primary">
-        LOGOUT!!
-      </Link>
+    <div className="w-full bg-lightblue-100 min-h-max h-dvh justify-center place-content-center hidden sm:inline px-6">
 
-      <br />
+      {/*Logo and Welcome Message:*/}
+      <div className="grid justify-center items-center text-center -translate-y-10">
+        <img className="justify-self-center size-32" src="/logo.svg" alt="logo" />
+        <h1 className="font-bold text-2xl"> Welcome to Entropy! </h1>
+        <p className="text-lg"> Select a conversation to start chatting </p>
+      </div>
+
     </div>
   )
 }
