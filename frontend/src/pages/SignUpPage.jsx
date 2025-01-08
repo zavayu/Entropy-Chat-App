@@ -1,6 +1,8 @@
 import React from 'react'
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import toast from 'react-hot-toast';
+import { useAuthStore } from '../store/useAuthStore';
 
 const SignUpPage = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -9,6 +11,39 @@ const SignUpPage = () => {
     email: "",
     password: "",
   });
+
+  const {signup} = useAuthStore();
+
+  const validateForm = () => {
+    console.log("Validating...");
+    if (!formData.name.trim()) {
+      //console.log("name");
+      return toast.error("Name is required");
+    }
+    if (!formData.email.trim()) {
+      //console.log("email");
+      return toast.error("Email is required");
+    }
+    if (!formData.password) {
+      //console.log("password");
+      return toast.error("Password is required");
+    }
+    if (formData.password.length < 6) {
+      //console.log("6 lets");
+      return toast.error("Password must be at least 6 characters");
+    }
+
+    return true;
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    const success = validateForm();
+    //console.log(formData);
+    //console.log(success===true);
+    if (success===true) signup(formData);
+  };
 
   return (
     <div className="h-dvh min-h-max grid gap-4 sm:gap-2 justify-center items-center bg-blue-200">
@@ -23,7 +58,7 @@ const SignUpPage = () => {
       {/*Sign Up Form:*/}
       <div className="card card-normal bg-base-100 w-72 sm:w-96 shadow-2xl mb-24">
         <div className="card-body">
-          <form onSubmit={""} className="gap-6">  {/*Needs Backend Here*/}
+          <form onSubmit={handleSubmit} className="gap-6"> 
 
             {/*Name Field:*/}
             <div className="form-control">
@@ -84,24 +119,22 @@ const SignUpPage = () => {
                   ) : (
                     <img src="/closed_eye.svg" alt="show password" />
                   )}
-
-
                 </button>
               </div>
             </div>
 
             <button type="submit" className="btn btn-primary w-full mt-4 mb-2">Create Account</button>
-
-            <div className="text-center">
-              <p className="text-base-content/60 text-sm sm:text-base">
-                Already have an account?{" "}
-                <Link to="/login" className="link link-primary">
-                  Sign in
-                </Link>
-              </p>
-            </div>
-            
           </form>
+
+          <div className="text-center">
+            <p className="text-base-content/60 text-sm sm:text-base">
+              Already have an account?{" "}
+              <Link to="/login" className="link link-primary">
+                Sign in
+              </Link>
+            </p>
+          </div>
+
         </div>
       </div>
     </div>

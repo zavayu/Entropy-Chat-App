@@ -1,6 +1,7 @@
 import React from 'react'
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useAuthStore } from '../store/useAuthStore';
 
 const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -8,6 +9,13 @@ const LoginPage = () => {
     email: "",
     password: "",
   });
+  const { login } = useAuthStore();
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    
+    login(formData);
+  }
 
   return (
     <div className="h-dvh min-h-max grid gap-4 sm:gap-2 justify-center items-center bg-blue-200">
@@ -22,7 +30,7 @@ const LoginPage = () => {
       {/*Sign in Form:*/} 
       <div className="card card-normal bg-base-100 w-72 sm:w-96 shadow-2xl mb-32 justify-self-center">
         <div className="card-body">
-          <form onSubmit={""} className="gap-6">  {/*Needs Backend Here*/}
+          <form onSubmit={handleSubmit} className="gap-6">
 
             {/*Email Field:*/}
             <div className="form-control mt-1">

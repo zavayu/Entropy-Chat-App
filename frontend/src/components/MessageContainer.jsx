@@ -13,6 +13,11 @@ const MessageContainer = () => {
         LOGIN!!
       </Link>
       <br />
+      <Link to={"/logout"} className="link link-primary">
+        LOGOUT!!
+      </Link>
+
+      <br />
     </div>
   )
 }
