@@ -23,11 +23,9 @@ const Sidebar = () => {
         </Link>
 
         {/*New Message Button:*/}
-        <Link to={"/"}>
-          <button className="btn btn-square rounded-2xl size-16 border-gray-300" onClick={() => setNewMessage(!newMessage)}>
-            <img src="/new_message_icon.svg" alt="new message icon" className="size-9" />
-          </button>
-        </Link>
+        <button className="btn btn-square rounded-2xl size-16 border-gray-300" onClick={() => setNewMessage(!newMessage)}>
+          <img src="/new_message_icon.svg" alt="new message icon" className="size-9" />
+        </button>
 
         {/*New Messages Pop-up:*/}
         <div className={`card bg-base-100 shadow-xl fixed w-96 h-44 justify-center ${newMessage ? "left-24 translate-y-20" : "hidden"}`}
@@ -65,7 +63,7 @@ const Sidebar = () => {
       {/*Profile Picture:*/}
       <div className="absolute pl-4 bottom-10 grid justify-center gap-3">
         <Link to={"/profile"}>
-          <img src={authUser.profilePic} alt="Profile" className="size-20 rounded-full border-2" />
+          <img src={authUser.profilePic} alt="Profile" className="size-20 rounded-full border-2 border-gray-300" />
         </Link>
       </div>
 
