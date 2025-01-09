@@ -1,22 +1,5 @@
 import Message from "../models/message.model.js";
 
-export const getContacts = async(req, res) => {
-  try {
-    const loggedInUserId = req.user._id;
-
-    // Find the user and populate the contacts field
-    const user = await User.findById(loggedInUserId).populate({
-      path: 'contacts',
-      select: 'name email', // Only included name and email
-    });
-    
-    return user.contacts; // Return only the contacts
-  } catch (error) {
-    console.log('Error fetching contacts:', error);
-    res.status(500).json({ error: "Internal server error" })
-  }
-};
-
 export const getMessages = async(req, res) => {
   try {
     const { id:userToChatId } = req.params
