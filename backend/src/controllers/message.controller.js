@@ -15,6 +15,7 @@ export const getUsers = async(req, res) => {
 export const getMessages = async(req, res) => {
   try {
     const { id:userToChatId } = req.params
+    console.log("userToChatId: ", userToChatId);
     const senderId = req.user._id;
 
     const messages = await Message.find({
@@ -31,9 +32,20 @@ export const getMessages = async(req, res) => {
   }
 };
 
+export const getMessagesByChat = async(req, res) => {
+  try{
+    const { id:chatId } = req.params;
+    const messages = await Message.find({ chatId });
+    res.status(200).json(messages);
+  } catch (error) {
+    console.log("Error in getMessagesByChat controller: ", error.message);
+    res.status(500).json({ error: "Internal server error" })
+  }
+};
+
 export const sendMessage = async(req, res) => {
   try {
-    const { text, image } = req.body;
+    const { text, image, chatId } = req.body;
     const { id:receiverId } = req.params;
     const senderId = req.user._id;
 
@@ -48,6 +60,7 @@ export const sendMessage = async(req, res) => {
       receiverId,
       text,
       image: imageUrl,
+      chatId,
     });
 
     await newMessage.save();
