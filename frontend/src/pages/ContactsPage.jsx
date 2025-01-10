@@ -14,12 +14,12 @@ const ContactsPage = () => {
   }
 
   return (
-    <div className="flex bg-lightblue-50 w-full">
+    <div className="flex bg-lightblue-50 w-full overflow-hidden">
 
       <Sidebar />
       <div className="w-full h-screen">
 
-        <header className="pl-12 px-24 pt-7">
+        <header className="pl-12 px-24 pt-7 pb-6">
           <span className="text-5xl font-bold pl-7 pb-4"> Contacts</span>
           <hr className="w-10/12 border-2 m-0 fixed top-24" />
 

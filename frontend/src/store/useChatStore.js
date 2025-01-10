@@ -7,6 +7,7 @@ export const useChatStore = create((set) => ({
   messages: [],
   users: [],
   selectedUser: null,
+  contacts: [],
 
   getUsers: async() => {
     try {
@@ -40,5 +41,15 @@ export const useChatStore = create((set) => ({
   },
 
   setSelectedUser: (selectedUser) => set({ selectedUser }),
+
+  getContacts: async(userId) => {
+    try {
+      const res = await axiosInstance.get(`/user/getContacts`);
+      set({ contacts: res.data });
+    } catch (error) {
+      toast.error(error.response.data.message);
+      console.log("Error fetching contacts: ", error.message);
+    }
+  }
 
 }));
