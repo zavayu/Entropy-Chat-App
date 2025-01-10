@@ -1,21 +1,33 @@
 import Message from "../models/message.model.js";
+import User from "../models/user.model.js";
 
-export const getContacts = async(req, res) => {
+// export const getContacts = async(req, res) => {
+//   try {
+//     const loggedInUserId = req.user._id;
+
+//     // Find the user and populate the contacts field
+//     const user = await User.findById(loggedInUserId).populate({
+//       path: 'contacts',
+//       select: 'name email', // Only included name and email
+//     });
+    
+//     return user.contacts; // Return only the contacts
+//   } catch (error) {
+//     console.log('Error fetching contacts:', error);
+//     res.status(500).json({ error: "Internal server error" })
+//   }
+// };
+
+export const getUsers = async(req, res) => {
   try {
     const loggedInUserId = req.user._id;
-
-    // Find the user and populate the contacts field
-    const user = await User.findById(loggedInUserId).populate({
-      path: 'contacts',
-      select: 'name email', // Only included name and email
-    });
-    
-    return user.contacts; // Return only the contacts
-  } catch (error) {
-    console.log('Error fetching contacts:', error);
-    res.status(500).json({ error: "Internal server error" })
+    const filteredUsers = await User.find({ _id: { $ne: loggedInUserId } }).select("-password");
+    res.status(200).json(filteredUsers);
+  } catch(error) {
+    console.log("Error in getUsers controller: ", error.message);
+    res.status(500).json({ error: "Internal server error" });
   }
-};
+}
 
 export const getMessages = async(req, res) => {
   try {

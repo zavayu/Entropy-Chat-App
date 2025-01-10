@@ -1,23 +1,29 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
+import { useChatStore } from '../store/useChatStore.js';
 
 const ChatsList = () => {
-  const [hasChats, setHasChats] = useState(false);
+  const [hasChats, setHasChats] = useState(true);
+  const { getUsers, users, selectedUser, setSelectedUser } = useChatStore();
+
+  useEffect(() => {
+    getUsers()
+  }, [getUsers])
 
   const handleSubmit = async (e) => {
     console.log("Searching...");
     e.preventDefault();
-    {/*BACKEND GOES HERE!*/}
+    {/*BACKEND GOES HERE!*/ }
   }
 
   return (
-    <div className="bg-lightblue-50 min-h-max h-dvh justify-center hidden sm:inline px-4 border-r-4">
+    <div className="bg-lightblue-50 h-screen w-1/5 justify-center hidden sm:inline px-4 border-r-4">
 
       {/*Header:*/}
-      <header>
+      <header className="h-1/5">
         <h2 className="text-5xl font-bold py-8 pl-2">Chats</h2>
         {/*Search Bar:*/}
         <form onSubmit={handleSubmit}>
-          <label className="input input-bordered flex items-center rounded-full w-72">
+          <label className="input input-bordered flex items-center rounded-full">
             <input type="text" className="grow" placeholder="Search" />
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -33,13 +39,31 @@ const ChatsList = () => {
         </form>
 
         <div className="divider"></div>
-        
+
       </header>
 
       {/*Chats List:*/}
-      <div className="justify-center text-center">
-        {/*Empty message:*/}
-        <span className={` text-gray-500 ${hasChats ? "hidden" : "inline"}`}>No recent messages</span>
+      <div className="justify-center text-center overflow-y-auto h-4/5">
+
+        {/*If there are chats, display them:*/}
+        {hasChats ?
+          <div className="grid grid-cols-1 gap-6 pt-2">
+            {users.map((user) => (
+              <button
+                key={user._id}
+                onClick={() => setSelectedUser(user)}
+                className={`pr-3 rounded-2xl h-24 transition-colors ring-1 ${selectedUser === user ? "hover:bg-lightblue-200 bg-lightblue-200 text-white ring-blue-200" : "bg-base-200 hover:bg-base-300 ring-gray-200"
+                  }`}
+              >
+                <div className="flex items-center justify-start mx-auto pl-4">
+                  <img src={user.profilePic} alt={user.name} className="size-12 rounded-full" />
+                  <h3 className="pl-2 pt-1 ">
+                    {user.name}
+                  </h3>
+                </div>
+              </button>
+            ))}
+          </div> : <span className={` text-gray-500 ${hasChats ? "hidden" : "inline"}`}>No recent messages</span>}
       </div>
 
     </div>

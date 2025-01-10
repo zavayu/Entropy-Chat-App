@@ -1,16 +1,28 @@
-import React from 'react'
-import { Link } from 'react-router-dom';
-const MessageContainer = () => {
-  return (
-    <div className="w-full bg-lightblue-100 min-h-max h-dvh justify-center place-content-center hidden sm:inline px-6">
+import React, { useEffect } from 'react'
+import { useChatStore } from '../store/useChatStore.js';
+import MessageHeader from './MessageHeader.jsx';
+import MessageFooter  from './MessageFooter.jsx';
 
-      {/*Logo and Welcome Message:*/}
-      <div className="grid justify-center items-center text-center -translate-y-10">
-        <img className="justify-self-center size-32" src="/logo.svg" alt="logo" />
-        <h1 className="font-bold text-2xl"> Welcome to Entropy! </h1>
-        <p className="text-lg"> Select a conversation to start chatting </p>
+const MessageContainer = () => {
+  const {messages, getMessages, selectedUser} = useChatStore();
+
+  useEffect (() => {
+    if (selectedUser) {
+      getMessages(selectedUser._id)
+    }
+  }, [selectedUser._id, getMessages])
+
+  return (
+    <div className="bg-lightblue-100 h-screen w-4/5 hidden sm:inline">
+
+      <MessageHeader/>
+      
+      {/* Messages */}
+      <div className="h-3/4 overflow-y-auto px-10">
+        <p>These are messages! XD</p>
       </div>
 
+      <MessageFooter/>
     </div>
   )
 }
