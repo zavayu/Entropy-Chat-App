@@ -5,7 +5,7 @@ import Message from '../models/message.model.js';
 export const getChats = async(req, res) => {
     try {
         const loggedInUserId = req.user._id;
-        const chats = await Chat.find({ chatters: loggedInUserId }).populate('chatters').populate('messages');
+        const chats = await Chat.find({ chatters: loggedInUserId }).populate('chatters');
         res.status(200).json(chats);
     } catch (error) {
         console.log('Error fetching chats:', error);
