@@ -3,7 +3,7 @@ import User from '../models/user.model.js';
 export const getContacts = async (req, res) => {
   try {
     const loggedInUserId = req.user._id;
-    const user = await User.findById(loggedInUserId);
+    const user = await User.findById(loggedInUserId).populate('contacts', '-password');
     res.status(200).json(user.contacts);
   } catch (error) {
     console.log('Error fetching contacts:', error);
