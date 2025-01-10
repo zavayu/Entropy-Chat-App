@@ -22,15 +22,15 @@ export const signup = async (req, res) => {
     // HASH PASSWORD
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
-    // https://avatar-placeholder.iran.liara.run/
 
-    const boyProfilePic = `https://avatar.iran.liara.run/username?username=${name}`;
+    //const boyProfilePic = `https://avatar.iran.liara.run/username?username=${name}`;
+    const defaultProfilePic = `https://ui-avatars.com/api/?background=random&name=${name}`
 
     const newUser = new User({
       name,
       email,
       password: hashedPassword,
-      profilePic: boyProfilePic,
+      profilePic: defaultProfilePic,
     });
     if (newUser) {
       generateTokenAndSetCookie(newUser._id, res);
