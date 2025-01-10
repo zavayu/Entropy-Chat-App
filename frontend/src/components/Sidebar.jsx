@@ -35,7 +35,7 @@ const Sidebar = () => {
         </button>
 
         {/*New Messages Pop-up:*/}
-        <div className={`card bg-base-100 shadow-xl fixed w-96 h-44 justify-center ${newMessage ? "left-24 translate-y-20" : "hidden"}`}
+        <div className={`card bg-base-100 shadow-xl fixed w-96 h-44 justify-center ${newMessage ? "left-24 translate-y-20 z-10" : "hidden"}`}
         >
           <div className="card-body">
             <h2 className="card-title">New Message</h2>

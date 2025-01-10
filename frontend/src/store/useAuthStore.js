@@ -38,7 +38,7 @@ export const useAuthStore = create((set) => ({
       set ({ authUser: res.data});
       toast.success("Logged in successfully");
     } catch (error) {
-      toast.error("Invalid Credentials");
+      toast.error(error.response.data.message);
     } 
   },
 

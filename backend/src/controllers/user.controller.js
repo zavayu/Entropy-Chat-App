@@ -7,7 +7,7 @@ export const getContacts = async (req, res) => {
     res.status(200).json(user.contacts);
   } catch (error) {
     console.log('Error fetching contacts:', error);
-    res.status(500).json({ error: "Internal server error" })
+    res.status(500).json({ message: "Internal server error" })
   }
 };
 
@@ -15,18 +15,21 @@ export const addContact = async (req, res) => {
   try {
     const user = await User.findById(req.user._id);
     if (!user) {
-      return res.status(404).json({ error: 'User not found' });
+      return res.status(404).json({ message: 'User not found' });
     }
     const { email } = req.body;
     if (!email) {
-      return res.status(400).json({ error: 'Email is required' });
+      return res.status(400).json({ message: 'Email is required' });
     }
     const contact = await User.findOne({ email });
     if (!contact) {
-      return res.status(404).json({ error: 'Contact with the provided email not found' });
+      return res.status(404).json({ message: 'Email not found' });
     }
     if (user.contacts.includes(contact._id.toString())) {
-      return res.status(409).json({ error: 'Contact already exists in user\'s contacts' });
+      return res.status(409).json({ message: 'Contact already exists in user\'s contacts' });
+    }
+    if (user._id.toString() === contact._id.toString()) {
+      return res.status(409).json({ message: 'User cannot add itself as a contact' });
     }
     user.contacts.push(contact._id);
     await user.save();
@@ -41,18 +44,18 @@ export const deleteContact = async (req, res) => {
   try {
     const user = await User.findById(req.user._id);
     if (!user) {
-      return res.status(404).json({ error: 'User not found' });
+      return res.status(404).json({ message: 'User not found' });
     }
     const { email } = req.body;
     if (!email) {
-      return res.status(400).json({ error: 'Email is required' });
+      return res.status(400).json({ message: 'Email is required' });
     }
     const contact = await User.findOne({ email });
     if (!contact) {
-      return res.status(404).json({ error: 'Contact with the provided email not found' });
+      return res.status(404).json({ message: 'Contact with the provided email not found' });
     }
     if (!user.contacts.includes(contact._id.toString())) {
-      return res.status(409).json({ error: 'Selected user is not a contact' });
+      return res.status(409).json({ message: 'Selected user is not a contact' });
     }
     user.contacts.pull(contact._id);
     await user.save();
@@ -67,7 +70,7 @@ export const getUser = async(req, res) => {
     try{
         const { id } = req.body;
         if(!mongoose.Types.ObjectId.isValid(id)){
-            return res.status(400).json({ error: "Invalid user id" });
+            return res.status(400).json({ message: "Invalid user id" });
         }
         const user = await User.findById(id).select("-password");
         res.status(200).json(user);

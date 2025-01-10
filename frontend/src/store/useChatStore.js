@@ -1,7 +1,6 @@
 import {create} from "zustand"
 import { axiosInstance } from "../lib/axios.js"
 import toast from "react-hot-toast"
-import { sendMessage } from "../../../backend/src/controllers/message.controller.js";
 
 export const useChatStore = create((set) => ({
   messages: [],
@@ -50,6 +49,16 @@ export const useChatStore = create((set) => ({
       toast.error(error.response.data.message);
       console.log("Error fetching contacts: ", error.message);
     }
-  }
+  },
+
+  addContact: async(email) => {
+    try {
+      await axiosInstance.post(`/user/addContact`, { email });
+      toast.success("Contact added successfully");
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Error adding contact");
+      console.log("Error adding contact: ", error.message);
+    }
+  },
 
 }));

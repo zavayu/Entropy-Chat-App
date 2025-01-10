@@ -3,11 +3,11 @@ import { useChatStore } from '../store/useChatStore.js';
 
 const ChatsList = () => {
   const [hasChats, setHasChats] = useState(true);
-  const { getUsers, users, selectedUser, setSelectedUser } = useChatStore();
+  const { contacts, getContacts, selectedUser, setSelectedUser } = useChatStore();
 
   useEffect(() => {
-    getUsers()
-  }, [getUsers])
+    getContacts()
+  }, [getContacts])
 
   const handleSubmit = async (e) => {
     console.log("Searching...");
@@ -48,7 +48,7 @@ const ChatsList = () => {
         {/*If there are chats, display them:*/}
         {hasChats ?
           <div className="grid grid-cols-1 gap-6 pt-2">
-            {users.map((user) => (
+            {contacts.map((user) => (
               <button
                 key={user._id}
                 onClick={() => setSelectedUser(user)}

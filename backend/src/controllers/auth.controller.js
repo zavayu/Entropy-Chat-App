@@ -16,7 +16,7 @@ export const signup = async (req, res) => {
     }
 
     if (user) {
-      return res.status(400).json({ error: "Email already exists" });
+      return res.status(400).json({ message: "Email already exists" });
     }
 
     // HASH PASSWORD
@@ -58,7 +58,7 @@ export const login = async (req, res) => {
     const user = await User.findOne({ email });
     const isPasswordCorrect = await bcrypt.compare(password, user?.password || "");
     if (!user || !isPasswordCorrect) {
-      return res.status(400).json({ error: "Invalid Credentials" });
+      return res.status(400).json({ message: "Invalid Credentials" });
     }
 
     generateTokenAndSetCookie(user._id, res);
