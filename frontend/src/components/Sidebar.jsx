@@ -1,10 +1,12 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom';
 import { useAuthStore } from '../store/useAuthStore';
+import { useChatStore } from '../store/useChatStore';
 
 const Sidebar = () => {
   const [newMessage, setNewMessage] = useState(false);
   const { authUser } = useAuthStore();
+  const { selectedUser, setSelectedUser } = useChatStore();
 
   const handleSubmit = async (e) => {
     console.log("Searching...");
@@ -13,7 +15,7 @@ const Sidebar = () => {
   }
 
   return (
-    <div className="max-w-28 bg-lightblue-100 h-screen justify-center hidden sm:inline border-r-4 overflow-y-auto">
+    <div className="max-w-28 bg-primary h-screen justify-center hidden sm:inline border-r-4 border-neutral overflow-y-auto">
       {/*Logo:*/}
       <Link to={"/"}>
         <img src="/logo.svg" alt="logo" className="px-4 mt-6" />
@@ -35,7 +37,7 @@ const Sidebar = () => {
         </button>
 
         {/*New Messages Pop-up:*/}
-        <div className={`card bg-base-100 shadow-xl fixed w-96 h-44 justify-center ${newMessage ? "left-24 translate-y-20 z-10" : "hidden"}`}
+        <div className={`card bg-base-100 shadow-xl fixed w-96 h-44 justify-center ${newMessage ? "left-24 -translate-y-5 z-10" : "hidden"}`}
         >
           <div className="card-body">
             <h2 className="card-title">New Message</h2>

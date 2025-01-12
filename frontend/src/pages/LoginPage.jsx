@@ -79,12 +79,12 @@ const LoginPage = () => {
               </div>
             </div>
 
-            <button type="submit" className="btn btn-primary w-full mt-4 mb-2">Login</button>
+            <button type="submit" className="btn btn-info w-full mt-4 mb-2">Login</button>
 
             <div className="text-center">
               <p className="text-base-content/60 text-sm sm:text-base">
                 Don't have an account?{" "}
-                <Link to="/signup" className="link link-primary">
+                <Link to="/signup" className="link link-info">
                   Sign Up
                 </Link>
               </p>

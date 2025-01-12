@@ -13,7 +13,7 @@ const MessageContainer = () => {
   }, [selectedUser._id, getMessages])
 
   return (
-    <div className="bg-lightblue-100 h-screen w-4/5 hidden sm:inline">
+    <div className="bg-primary h-screen w-4/5 hidden sm:inline">
 
       <MessageHeader/>
       

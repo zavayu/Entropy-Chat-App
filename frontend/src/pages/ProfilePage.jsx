@@ -5,7 +5,7 @@ import { useAuthStore } from '../store/useAuthStore'
 const ProfilePage = () => {
   const {authUser, logout} = useAuthStore();
   return (
-    <div className="flex bg-lightblue-50 w-full">
+    <div className="flex bg-secondary w-full">
 
       <Sidebar/>
       {/* Profile Header */}

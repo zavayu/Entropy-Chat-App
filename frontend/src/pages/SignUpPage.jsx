@@ -123,13 +123,13 @@ const SignUpPage = () => {
               </div>
             </div>
 
-            <button type="submit" className="btn btn-primary w-full mt-4 mb-2">Create Account</button>
+            <button type="submit" className="btn btn-info w-full mt-4 mb-2">Create Account</button>
           </form>
 
           <div className="text-center">
             <p className="text-base-content/60 text-sm sm:text-base">
               Already have an account?{" "}
-              <Link to="/login" className="link link-primary">
+              <Link to="/login" className="link link-info">
                 Sign in
               </Link>
             </p>

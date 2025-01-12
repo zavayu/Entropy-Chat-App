@@ -22,7 +22,7 @@ const ContactsPage = () => {
   }
 
   return (
-    <div className="flex bg-lightblue-50 w-full overflow-hidden">
+    <div className="flex bg-secondary w-full overflow-hidden">
 
       <Sidebar />
 
