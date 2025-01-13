@@ -6,7 +6,7 @@ import { protectRoute } from "../middleware/auth.middleware.js";
 const router = express.Router();
 
 router.get("/getContacts", protectRoute, getContacts);
-router.get("/getUser", protectRoute, getUser);
+router.get("/getUser/:id", protectRoute, getUser);
 router.post("/addContact", protectRoute, addContact);
 router.post("/deleteContact", protectRoute, deleteContact);
 

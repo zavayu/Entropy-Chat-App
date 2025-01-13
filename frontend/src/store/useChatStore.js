@@ -1,14 +1,17 @@
-import {create} from "zustand"
-import { axiosInstance } from "../lib/axios.js"
-import toast from "react-hot-toast"
+import { create } from "zustand";
+import { axiosInstance } from "../lib/axios.js";
+import toast from "react-hot-toast";
+import { useAuthStore } from '../store/useAuthStore';
 
 export const useChatStore = create((set) => ({
   messages: [],
   users: [],
   selectedUser: null,
+  selectedChat: null,
   contacts: [],
+  chats: [],
 
-  getUsers: async() => {
+  getUsers: async () => {
     try {
       const res = await axiosInstance.get("/messages/users");
       set({ users: res.data });
@@ -18,7 +21,7 @@ export const useChatStore = create((set) => ({
     }
   },
 
-  getMessages: async(userId) => {
+  getMessages: async (userId) => {
     try {
       const res = await axiosInstance.get(`/messages/${userId}`);
       set({ messages: res.data });
@@ -28,9 +31,9 @@ export const useChatStore = create((set) => ({
     }
   },
 
-  sendMessage: async(messageData) => {
+  sendMessage: async (messageData) => {
     try {
-      const {selectedUser, messages} = get();
+      const { selectedUser, messages } = get();
       const res = await axiosInstance.post(`/messages/send/${selectedUser._id}`, messageData);
       set({ messages: [...messages, res.data] });
     } catch (error) {
@@ -41,7 +44,9 @@ export const useChatStore = create((set) => ({
 
   setSelectedUser: (selectedUser) => set({ selectedUser }),
 
-  getContacts: async(userId) => {
+  setSelectedChat: (selectedChat) => set({ selectedChat }),
+
+  getContacts: async () => {
     try {
       const res = await axiosInstance.get(`/user/getContacts`);
       set({ contacts: res.data });
@@ -51,7 +56,7 @@ export const useChatStore = create((set) => ({
     }
   },
 
-  addContact: async(email) => {
+  addContact: async (email) => {
     try {
       await axiosInstance.post(`/user/addContact`, { email });
       toast.success("Contact added successfully");
@@ -61,4 +66,24 @@ export const useChatStore = create((set) => ({
     }
   },
 
+  getChats: async () => {
+    try {
+      const res = await axiosInstance.get(`/chat/getChats`);
+      const updatedChats = await Promise.all(
+        res.data.map(async (chat) => {
+          const otherChatter = await axiosInstance.get(`/chat/getOtherChatters/${chat._id}`);
+
+          return {
+            ...chat,
+            otherChatter,
+          };
+        })
+      );
+  
+      set({ chats: updatedChats });
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Error fetching chats");
+      console.log("Error fetching chats: ", error.message);
+    }
+  },
 }));

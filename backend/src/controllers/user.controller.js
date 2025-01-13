@@ -1,4 +1,5 @@
 import User from '../models/user.model.js';
+import mongoose from 'mongoose';
 
 export const getContacts = async (req, res) => {
   try {
@@ -68,7 +69,7 @@ export const deleteContact = async (req, res) => {
 
 export const getUser = async(req, res) => {
     try{
-        const { id } = req.body;
+        const { id } = req.params;
         if(!mongoose.Types.ObjectId.isValid(id)){
             return res.status(400).json({ message: "Invalid user id" });
         }

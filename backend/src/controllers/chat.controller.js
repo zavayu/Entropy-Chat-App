@@ -49,3 +49,26 @@ export const deleteChat = async(req, res) => {
         res.status(500).json({ error: "Internal server error" });
     }
 };
+
+export const getOtherChatters = async (req, res) => {
+    try {
+        const { chatId } = req.params;
+        const userId = req.user._id; // Assuming `req.user._id` contains the current user's ID
+
+        // Find the chat
+        const chat = await Chat.findById(chatId);
+        if (!chat) {
+            return res.status(404).json({ error: "Chat not found" });
+        }
+
+        // Exclude the requesting user's ID
+        const otherChatters = await User.find({ 
+            _id: { $in: chat.chatters, $ne: userId } 
+        });
+
+        res.status(200).json(otherChatters);
+    } catch (error) {
+        console.log('Error fetching other chatters:', error);
+        res.status(500).json({ error: "Internal server error" });
+    }
+};
