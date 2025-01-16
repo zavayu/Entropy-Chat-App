@@ -21,13 +21,24 @@ export const useChatStore = create((set) => ({
     }
   },
 
-  getMessages: async (userId) => {
+  getMessages: async (chatId) => {
     try {
-      const res = await axiosInstance.get(`/messages/${userId}`);
+      const res = await axiosInstance.get(`/messages/chat/${chatId}`);
       set({ messages: res.data });
     } catch (error) {
       toast.error(error.response.data.message);
       console.log("Error fetching messages: ", error.message);
+    }
+  },
+
+  getLastMessage: async (chatId) => {
+    try {
+      const res = await axiosInstance.get(`/messages/chat/${chatId}/last`);
+      return res.data;
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Failed to fetch last message");
+      console.error("Error fetching last message: ", error.message);
+      return null;
     }
   },
 
@@ -72,10 +83,12 @@ export const useChatStore = create((set) => ({
       const updatedChats = await Promise.all(
         res.data.map(async (chat) => {
           const otherChatter = await axiosInstance.get(`/chat/getOtherChatters/${chat._id}`);
+          const lastMessage = await axiosInstance.get(`/messages/chat/${chat._id}/last`);
 
           return {
             ...chat,
             otherChatter,
+            lastMessage,
           };
         })
       );

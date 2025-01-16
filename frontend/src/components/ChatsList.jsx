@@ -4,11 +4,12 @@ import { useAuthStore } from '../store/useAuthStore';
 
 const ChatsList = () => {
   const [hasChats, setHasChats] = useState(true);
-  const { chats, getChats, selectedUser, setSelectedUser } = useChatStore();
+  const { chats, getChats, selectedUser, selectedChat, setSelectedUser, setSelectedChat } = useChatStore();
   const { authUser } = useAuthStore();
+  const lastMessage = useState(null);
 
   useEffect(() => {
-    getChats(); // This will now populate chats with `otherChatter` data.
+    getChats();
   }, [getChats]);
 
   const handleSubmit = async (e) => {
@@ -51,15 +52,17 @@ const ChatsList = () => {
             {chats.map((chat) => {
               // Each chat now has `otherChatter` inside it
               const otherChatter = chat.otherChatter.data[0]; // directly access the other chatter
-              console.log(otherChatter);
-              console.log(otherChatter.name);
+              const lastMessage = chat.lastMessage.data; // directly access the last message
 
               if (!otherChatter) return null;
 
               return (
                 <button
                   key={chat._id}
-                  onClick={() => setSelectedUser(otherChatter)}
+                  onClick={() => {
+                    setSelectedUser(otherChatter)
+                    setSelectedChat(chat)
+                  }}
                   className={`pr-3 rounded-2xl h-24 transition-colors ring-1 ${
                     selectedUser?._id === otherChatter._id
                       ? 'hover:bg-accent bg-accent text-white ring-blue-200'
@@ -75,10 +78,10 @@ const ChatsList = () => {
                     <div className="pl-4 text-start">
                       <h3 className="font-semibold text-lg">{otherChatter.name}</h3>
                       {/* TODO: Add last message sent */}
-                      <p className="text-sm text-gray-500 truncate">Placeholder Message</p>
+                      <p className="text-sm text-gray-500 truncate">{lastMessage ? lastMessage.text : 'No messages yet'}</p>
                     </div>
                     {/* TODO: Add time of last message */}
-                    <p className="justify-self-end ml-auto pr-1 text-xs text-gray-400">7:04</p>
+                    <p className="justify-self-end ml-auto pr-1 text-xs text-gray-400">{lastMessage ? lastMessage.createdAt : 'No messages yet'}</p>
                   </div>
                 </button>
               );

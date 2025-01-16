@@ -4,13 +4,13 @@ import MessageHeader from './MessageHeader.jsx';
 import MessageFooter  from './MessageFooter.jsx';
 
 const MessageContainer = () => {
-  const {messages, getMessages, selectedUser} = useChatStore();
+  const {messages, getMessages, selectedUser, selectedChat } = useChatStore();
 
   useEffect (() => {
-    if (selectedUser) {
-      getMessages(selectedUser._id)
+    if (selectedChat) {
+      getMessages(selectedChat._id)
     }
-  }, [selectedUser._id, getMessages])
+  }, [selectedChat._id, getMessages])
 
   return (
     <div className="bg-primary h-screen w-4/5 hidden sm:inline">

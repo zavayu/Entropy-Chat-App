@@ -43,6 +43,18 @@ export const getMessagesByChat = async(req, res) => {
   }
 };
 
+export const getLastMessage = async(req, res) => {
+  try {
+    const { id:chatId } = req.params;
+    const lastMessage = await Message.findOne({ chatId }).sort({ createdAt: -1 });
+    res.status(200).json(lastMessage);
+  }
+  catch (error) {
+    console.log("Error in getLastMessage controller: ", error.message);
+    res.status(500).json({ error: "Internal server error" })
+  }
+};
+
 export const sendMessage = async(req, res) => {
   try {
     const { text, image, chatId } = req.body;
