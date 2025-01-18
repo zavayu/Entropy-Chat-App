@@ -1,10 +1,17 @@
-import React, { useEffect, useState } from 'react';
-import { useChatStore } from '../store/useChatStore.js';
-import { useAuthStore } from '../store/useAuthStore';
+import React, { useEffect, useState } from "react";
+import { useChatStore } from "../store/useChatStore.js";
+import { useAuthStore } from "../store/useAuthStore";
 
 const ChatsList = () => {
   const [hasChats, setHasChats] = useState(true);
-  const { chats, getChats, selectedUser, selectedChat, setSelectedUser, setSelectedChat } = useChatStore();
+  const {
+    chats,
+    getChats,
+    selectedUser,
+    selectedChat,
+    setSelectedUser,
+    setSelectedChat,
+  } = useChatStore();
   const { authUser } = useAuthStore();
   const lastMessage = useState(null);
 
@@ -14,13 +21,12 @@ const ChatsList = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Searching...');
+    console.log("Searching...");
     // BACKEND GOES HERE
   };
 
   return (
     <div className="bg-secondary h-screen w-1/5 min-w-72 justify-center hidden sm:inline px-4 border-r-4 border-neutral overflow-hidden">
-
       {/* Header */}
       <header className="h-1/5 min-h-48">
         <h2 className="text-5xl font-bold py-8 pl-2">Chats</h2>
@@ -60,13 +66,13 @@ const ChatsList = () => {
                 <button
                   key={chat._id}
                   onClick={() => {
-                    setSelectedUser(otherChatter)
-                    setSelectedChat(chat)
+                    setSelectedUser(otherChatter);
+                    setSelectedChat(chat);
                   }}
                   className={`pr-3 rounded-2xl h-24 transition-colors ring-1 ${
                     selectedUser?._id === otherChatter._id
-                      ? 'hover:bg-accent bg-accent text-white ring-blue-200'
-                      : 'bg-base-300 hover:bg-base-300 ring-gray-200'
+                      ? "hover:bg-accent bg-accent text-white ring-blue-200"
+                      : "bg-base-300 hover:bg-base-300 ring-gray-200"
                   }`}
                 >
                   <div className="flex items-center justify-start mx-auto pl-4">
@@ -76,12 +82,26 @@ const ChatsList = () => {
                       className="size-12 rounded-full"
                     />
                     <div className="pl-4 text-start">
-                      <h3 className="font-semibold text-lg">{otherChatter.name}</h3>
+                      <h3 className="font-semibold text-lg">
+                        {otherChatter.name}
+                      </h3>
                       {/* TODO: Add last message sent */}
-                      <p className="text-sm text-gray-500 truncate">{lastMessage ? lastMessage.text : 'No messages yet'}</p>
+                      <p className="text-sm text-gray-500 truncate">
+                        {lastMessage ? lastMessage.text : "No messages yet"}
+                      </p>
                     </div>
                     {/* TODO: Add time of last message */}
-                    <p className="justify-self-end ml-auto pr-1 text-xs text-gray-400">{lastMessage ? lastMessage.createdAt : 'No messages yet'}</p>
+                    <p className="justify-self-end ml-auto pr-1 text-xs text-gray-400">
+                      {lastMessage
+                        ? new Date(lastMessage.createdAt).toLocaleTimeString(
+                            [],
+                            {
+                              hour: "2-digit",
+                              minute: "2-digit",
+                            }
+                          )
+                        : "No messages yet"}
+                    </p>
                   </div>
                 </button>
               );

@@ -2,12 +2,24 @@ import React, { useState } from 'react'
 import { useChatStore } from '../store/useChatStore.js';
 
 const MessageFooter = () => {
-  const { selectedUser } = useChatStore();
+  const { selectedUser, selectedChat } = useChatStore();
   const [text, setText] = useState("");
   const { sendMessage } = useChatStore();
 
   const handleSendMessage = async(e) => {
-   console.log("Sending message: ", text);
+    e.preventDefault();
+    console.log("Sending message: ", text);
+    if (!text.trim()) return;
+    try {
+      await sendMessage({
+        text: text.trim(),
+        image: null,
+        chatId: selectedChat._id,
+    });
+      setText("");
+    } catch (error) {
+      console.log("Error sending message: ", error.message);
+    }
   }
 
   return (

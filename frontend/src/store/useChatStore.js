@@ -3,7 +3,7 @@ import { axiosInstance } from "../lib/axios.js";
 import toast from "react-hot-toast";
 import { useAuthStore } from '../store/useAuthStore';
 
-export const useChatStore = create((set) => ({
+export const useChatStore = create((set, get) => ({
   messages: [],
   users: [],
   selectedUser: null,
@@ -43,12 +43,12 @@ export const useChatStore = create((set) => ({
   },
 
   sendMessage: async (messageData) => {
+    const { selectedUser, messages } = get()
     try {
-      const { selectedUser, messages } = get();
       const res = await axiosInstance.post(`/messages/send/${selectedUser._id}`, messageData);
       set({ messages: [...messages, res.data] });
     } catch (error) {
-      toast.error(error.response.data.message);
+      toast.error(error.response?.data?.message);
       console.log("Error sending message: ", error.message);
     }
   },
@@ -62,7 +62,7 @@ export const useChatStore = create((set) => ({
       const res = await axiosInstance.get(`/user/getContacts`);
       set({ contacts: res.data });
     } catch (error) {
-      toast.error(error.response.data.message);
+      toast.error(error.response?.data?.message);
       console.log("Error fetching contacts: ", error.message);
     }
   },
