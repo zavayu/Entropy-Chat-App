@@ -23,7 +23,7 @@ const ContactsList = () => {
         {contacts.map((user) => (
           <div
             key={user._id}
-            className="flex flex-row pr-3 rounded-2xl h-24 transition-colors ring-1 bg-base-300 hover:bg-base-300 ring-gray-200 place-content-center"
+            className="flex flex-row pr-3 rounded-2xl h-24 transition-colors ring-1 bg-base-300 hover:bg-base-300 ring-gray-200 dark:ring-gray-400 place-content-center"
           >
             <div className="justify-self-start flex items-center mr-auto pl-4">
               <img src={user.profilePic} alt={user.name} className="size-16 rounded-full" />

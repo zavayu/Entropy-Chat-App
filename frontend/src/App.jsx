@@ -7,16 +7,18 @@ import { useAuthStore } from "./store/useAuthStore"
 import { useEffect } from "react"
 import {Toaster} from "react-hot-toast"
 import ContactsPage from "./pages/ContactsPage"
+import useLocalStorage from "use-local-storage"
 
 const App = () => {
   const {authUser, checkAuth} = useAuthStore();
+  const [isDark, setIsDark] = useLocalStorage("isDark", false);
 
   useEffect(() => {
     checkAuth()
   }, [checkAuth]);
 
   return (
-    <div>
+    <div data-theme={isDark ? "dark" : "light"}>
       <Routes>
         <Route path="/" element={authUser ? <HomePage /> : <Navigate to="/login"/>} />
         <Route path="/signup" element={!authUser ? <SignUpPage /> : <Navigate to="/"/>} />

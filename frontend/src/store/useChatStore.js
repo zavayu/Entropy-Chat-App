@@ -1,7 +1,6 @@
 import { create } from "zustand";
 import { axiosInstance } from "../lib/axios.js";
 import toast from "react-hot-toast";
-import { useAuthStore } from '../store/useAuthStore';
 
 export const useChatStore = create((set, get) => ({
   messages: [],
@@ -10,6 +9,17 @@ export const useChatStore = create((set, get) => ({
   selectedChat: null,
   contacts: [],
   chats: [],
+
+  getUserFromEmail: async (email) => {
+    try {
+      const res = await axiosInstance.get(`/user/getUserFromEmail/${email}`);
+      return res.data;
+    } catch (error) {
+      toast.error(error.response.data.message);
+      console.log("Error fetching user: ", error.message);
+      return null;
+    }
+  },
 
   getUsers: async () => {
     try {
@@ -97,6 +107,18 @@ export const useChatStore = create((set, get) => ({
     } catch (error) {
       toast.error(error.response?.data?.message || "Error fetching chats");
       console.log("Error fetching chats: ", error.message);
+    }
+  },
+
+  createChat: async (user, otherUser) => {
+    try {
+      console.log("user: ", user._id, "otherUser: ", otherUser._id);
+      const res = await axiosInstance.post(`/chat/createChat`, { userIds: [user._id, otherUser._id] });
+      set({ selectedChat: res.data.chat });
+      set({ chats: [...chats, res.data] });
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Error creating chat");
+      console.log("Error creating chat: ", error.message);
     }
   },
 }));

@@ -28,13 +28,13 @@ const MessageFooter = () => {
         <div className="flex-1 flex gap-2 justify-center">
           <input 
             type="text" 
-            className="w-[90%] input input-bordered rounded-2xl input-sm sm:input-lg bg-accent border-gray-300 placeholder-accent-content"
+            className="w-[90%] input input-bordered rounded-2xl input-sm sm:input-lg bg-lightblue-250 dark:bg-base-300 border-gray-300 dark:border-gray-500 placeholder-base-content"
             placeholder={`Message ${selectedUser.name} ...`}
             value={text}
             onChange={(e) => setText(e.target.value)}
           />
         </div>
-        <button type="submit" className="rounded-2xl size-16 bg-accent border-gray-500 hover:bg-blue-300">
+        <button type="submit" className="rounded-2xl size-16 bg-lightblue-250 dark:bg-base-300 border-gray-500 hover:bg-blue-300 dark:hover:bg-base-200">
           <img src="/send.svg" alt="Send Message" className="size-9 translate-x-3"/>
         </button>
       </form>

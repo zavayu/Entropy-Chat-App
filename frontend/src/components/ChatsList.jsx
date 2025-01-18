@@ -32,7 +32,7 @@ const ChatsList = () => {
         <h2 className="text-5xl font-bold py-8 pl-2">Chats</h2>
         {/* Search Bar */}
         <form onSubmit={handleSubmit}>
-          <label className="input input-bordered flex items-center rounded-full bg-gray-100">
+          <label className="input input-bordered flex items-center rounded-full bg-gray-100 dark:bg-gray-300">
             <input type="text" className="grow" placeholder="Search" />
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -71,8 +71,8 @@ const ChatsList = () => {
                   }}
                   className={`pr-3 rounded-2xl h-24 transition-colors ring-1 ${
                     selectedUser?._id === otherChatter._id
-                      ? "hover:bg-accent bg-accent text-white ring-blue-200"
-                      : "bg-base-300 hover:bg-base-300 ring-gray-200"
+                      ? "hover:bg-accent bg-accent text-white ring-blue-200 dark:ring-blue-700"
+                      : "bg-base-300 hover:bg-base-300 ring-gray-200 dark:ring-gray-700"
                   }`}
                 >
                   <div className="flex items-center justify-start mx-auto pl-4">
@@ -86,12 +86,12 @@ const ChatsList = () => {
                         {otherChatter.name}
                       </h3>
                       {/* TODO: Add last message sent */}
-                      <p className="text-sm text-gray-500 truncate">
+                      <p className="text-sm truncate max-w-44">
                         {lastMessage ? lastMessage.text : "No messages yet"}
                       </p>
                     </div>
                     {/* TODO: Add time of last message */}
-                    <p className="justify-self-end ml-auto pr-1 text-xs text-gray-400">
+                    <p className="justify-self-end ml-auto pr-1 text-xs">
                       {lastMessage
                         ? new Date(lastMessage.createdAt).toLocaleTimeString(
                             [],

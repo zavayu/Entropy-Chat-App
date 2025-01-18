@@ -46,7 +46,7 @@ const SignUpPage = () => {
   };
 
   return (
-    <div className="h-dvh min-h-max grid gap-4 sm:gap-2 justify-center items-center bg-blue-200">
+    <div className="h-dvh min-h-max grid gap-4 sm:gap-2 justify-center items-center bg-blue-200 dark:bg-slate-700">
 
       {/*Logo and Welcome Message:*/}
       <div className="mt-24 grid justify-center items-center text-center">
