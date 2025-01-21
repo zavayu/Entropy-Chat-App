@@ -47,13 +47,13 @@ export const deleteContact = async (req, res) => {
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
-    const { email } = req.body;
-    if (!email) {
-      return res.status(400).json({ message: 'Email is required' });
+    const { id } = req.body;
+    if (!id) {
+      return res.status(400).json({ message: 'Contact ID is required' });
     }
-    const contact = await User.findOne({ email });
+    const contact = await User.findById(id);
     if (!contact) {
-      return res.status(404).json({ message: 'Contact with the provided email not found' });
+      return res.status(404).json({ message: 'Contact with the provided ID not found' });
     }
     if (!user.contacts.includes(contact._id.toString())) {
       return res.status(409).json({ message: 'Selected user is not a contact' });
@@ -62,10 +62,11 @@ export const deleteContact = async (req, res) => {
     await user.save();
     res.status(200).json({ message: 'Contact deleted successfully' });
   } catch (error) {
-    console.error('Error adding contact:', error.message);
+    console.error('Error deleting contact:', error.message);
     res.status(500).json({ message: 'Internal server error' });
   }
 };
+
 
 export const getUser = async(req, res) => {
     try{

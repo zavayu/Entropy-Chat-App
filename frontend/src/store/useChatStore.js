@@ -87,6 +87,20 @@ export const useChatStore = create((set, get) => ({
     }
   },
 
+  deleteContact: async (userId) => {
+    try {
+      await axiosInstance.post('/user/deleteContact', {
+        id: userId
+      });
+      set((state) => ({
+        contacts: state.contacts.filter((contact) => contact._id !== userId),
+      }));
+      toast.success("Contact deleted successfully");
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Error deleting contact");
+      console.log("Error deleting contact: ", error.message);
+    }
+  },
   getChats: async () => {
     try {
       const res = await axiosInstance.get(`/chat/getChats`);

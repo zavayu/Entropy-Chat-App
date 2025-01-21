@@ -4,11 +4,21 @@ import { Link } from 'react-router-dom';
 
 const ContactsList = () => {
 
-  const { getContacts, contacts, selectedUser, setSelectedUser } = useChatStore();
-
+  const { getContacts, contacts, selectedUser, setSelectedUser, deleteContact } = useChatStore();
+  const [menuVisible, setMenuVisible] = useState(null);
   useEffect(() => {
     getContacts()
   }, [getContacts])
+
+  const toggleMenu = (userId) => {
+    setMenuVisible((prev) => (prev === userId ? null : userId));
+  };
+
+  const handleDeleteContact = (userId) => {
+    console.log(`Deleting contact with ID: ${userId}`);
+    deleteContact(userId);
+    setMenuVisible(null);
+  };
 
   return (
     <div className="h-[90%] overflow-y-auto pt-10">
@@ -49,13 +59,22 @@ const ContactsList = () => {
 
               <button
                 className="btn rounded-full size-14 border-lightgray-300 bg-lightgray-300 justify-items-center hover:bg-gray-400"
-                onClick={() => {}}
+                onClick={() => toggleMenu(user._id)}
               >
                 <img src="/3dots.svg" alt="messages icon" className="size-8" />
               </button>
-            </div>
 
-            
+              {menuVisible === user._id && (
+                <div className="absolute right-0 mt-2 w-40 bg-white border border-gray-300 rounded-md shadow-lg z-10">
+                  <button
+                    className="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-100"
+                    onClick={() => handleDeleteContact(user._id)}
+                  >
+                    Delete Contact
+                  </button>
+                </div>
+              )}
+            </div>
           </div>
         ))}
       </div>
