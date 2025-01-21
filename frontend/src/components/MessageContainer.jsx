@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { useChatStore } from "../store/useChatStore.js";
 import { useAuthStore } from "../store/useAuthStore.js";
 import MessageHeader from "./MessageHeader.jsx";
@@ -8,12 +8,24 @@ const MessageContainer = () => {
   const { messages, getMessages, selectedUser, selectedChat } = useChatStore();
   const { authUser } = useAuthStore();
 
+  // Reference to the last message
+  const lastMessageRef = useRef(null);
+
   useEffect(() => {
     if (selectedChat) {
       getMessages(selectedChat._id);
     }
   }, [selectedChat, getMessages]);
+
+  // Scroll to the bottom whenever messages change
+  useEffect(() => {
+    if (lastMessageRef.current) {
+      lastMessageRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [messages]);
+
   console.log("messages:", messages);
+
   return (
     <div className="bg-primary h-screen w-4/5 hidden sm:inline">
       {/* Header */}
@@ -22,7 +34,7 @@ const MessageContainer = () => {
       {/* Messages */}
       <div className="h-3/4 overflow-y-auto px-14 pt-3 pb-10">
         {messages.length > 0 ? (
-          messages.map((message) => (
+          messages.map((message, index) => (
             <div
               key={message._id}
               className={`chat ${
@@ -51,6 +63,11 @@ const MessageContainer = () => {
                   minute: "2-digit",
                 })}
               </p>
+
+              {/* Last message ref */}
+              {index === messages.length - 1 && (
+                <div ref={lastMessageRef}></div>
+              )}
             </div>
           ))
         ) : (
