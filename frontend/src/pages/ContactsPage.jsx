@@ -34,7 +34,8 @@ const ContactsPage = () => {
 
           {/* Add Contact Button */}
           <button onClick={() => setAddingContact(!addingContact)}>
-            <img src="/add_contact.svg" alt="Add Contact" className="absolute right-44 top-10 size-12" />
+            <img src="/add_contact.svg" alt="Add Contact" className="absolute right-44 top-10 size-12 dark:hidden" />
+            <img src="/add_contact-white.svg" alt="Add Contact" className="absolute right-44 top-10 size-12 hidden dark:inline" />
           </button>
 
           {/* Add Contact Card */}

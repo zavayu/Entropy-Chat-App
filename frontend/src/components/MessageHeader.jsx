@@ -1,9 +1,8 @@
-import React, { useState } from 'react'
 import { useChatStore } from '../store/useChatStore.js';
+import { useState, useEffect } from 'react';
 
 const MessageHeader = () => {
-  const { selectedUser } = useChatStore();
-  const [showProfileInfo, setShowProfileInfo] = useState(false);
+  const { selectedUser, setShowSelectedProfile } = useChatStore();
 
   return (
     <div className="flex justify-start items-center py-4 px-16 bg-secondary border-b-4 border-neutral">
@@ -19,8 +18,9 @@ const MessageHeader = () => {
         </p>
       </div>
 
-      <button className="ml-auto" onClick={() => setShowProfileInfo(!showProfileInfo)}>
-        <img src="/info.svg" alt="Profile Info"/>
+      <button className="ml-auto" onClick={() => setShowSelectedProfile(true)}>
+        <img src="/info.svg" alt="Profile Info" className="dark:hidden"/>
+        <img src="/info-white.svg" alt="Profile Info" className="hidden dark:inline"/>
       </button>
 
 

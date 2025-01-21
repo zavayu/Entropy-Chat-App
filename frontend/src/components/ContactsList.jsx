@@ -1,14 +1,20 @@
-import React, { useEffect, useState } from 'react'
-import { useChatStore } from '../store/useChatStore.js';
-import { Link } from 'react-router-dom';
+import React, { useEffect, useState } from "react";
+import { useChatStore } from "../store/useChatStore.js";
+import { Link } from "react-router-dom";
 
 const ContactsList = () => {
-
-  const { getContacts, contacts, selectedUser, setSelectedUser, deleteContact } = useChatStore();
+  const {
+    getContacts,
+    contacts,
+    selectedUser,
+    setSelectedUser,
+    deleteContact,
+    setShowSelectedProfile,
+  } = useChatStore();
   const [menuVisible, setMenuVisible] = useState(null);
   useEffect(() => {
-    getContacts()
-  }, [getContacts])
+    getContacts();
+  }, [getContacts]);
 
   const toggleMenu = (userId) => {
     setMenuVisible((prev) => (prev === userId ? null : userId));
@@ -24,7 +30,11 @@ const ContactsList = () => {
     <div className="h-[90%] overflow-y-auto pt-10">
       {/*Empty Message*/}
 
-      <div className={`w-fit h-[75vh] justify-center justify-self-center place-content-center text-center -translate-x-10 ${contacts.length > 0 ? "hidden" : "reflex"}`}>
+      <div
+        className={`w-fit h-[75vh] justify-center justify-self-center place-content-center text-center -translate-x-10 ${
+          contacts.length > 0 ? "hidden" : "reflex"
+        }`}
+      >
         <h1 className="font-bold text-2xl pb-2">Oops, It's empty in here!</h1>
         <p className="text-md">Add a contact to connect with friends</p>
       </div>
@@ -36,14 +46,14 @@ const ContactsList = () => {
             className="flex flex-row pr-3 rounded-2xl h-24 transition-colors ring-1 bg-base-300 hover:bg-base-300 ring-gray-200 dark:ring-gray-400 place-content-center"
           >
             <div className="justify-self-start flex items-center mr-auto pl-4">
-              <img src={user.profilePic} alt={user.name} className="size-16 rounded-full" />
+              <img
+                src={user.profilePic}
+                alt={user.name}
+                className="size-16 rounded-full"
+              />
               <div className="text-start pl-4 pt-1">
-                <h3 className="font-semibold">
-                  {user.name}
-                </h3>
-                <p className="pl-1">
-                  Online
-                </p>
+                <h3 className="font-semibold">{user.name}</h3>
+                <p className="pl-1">Online</p>
               </div>
             </div>
 
@@ -53,7 +63,11 @@ const ContactsList = () => {
                   className="rounded-full size-14 bg-lightgray-300 justify-items-center hover:bg-gray-400"
                   onClick={() => setSelectedUser(user)}
                 >
-                  <img src="/message_icon.svg" alt="messages icon" className="size-8" />
+                  <img
+                    src="/message_icon.svg"
+                    alt="messages icon"
+                    className="size-8"
+                  />
                 </button>
               </Link>
 
@@ -65,7 +79,18 @@ const ContactsList = () => {
               </button>
 
               {menuVisible === user._id && (
-                <div className="absolute right-0 mt-2 w-40 bg-white border border-gray-300 rounded-md shadow-lg z-10">
+                <div className="absolute -right-28 mt-20 w-40 bg-white border border-gray-300 rounded-md shadow-lg z-10">
+                  <Link to="/">
+                    <button
+                      className="block w-full text-left px-4 py-2 text-sm hover:bg-gray-100"
+                      onClick={() => {
+                        setSelectedUser(user);
+                        setShowSelectedProfile(true);
+                      }}
+                    >
+                      About Contact
+                    </button>
+                  </Link>
                   <button
                     className="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-100"
                     onClick={() => handleDeleteContact(user._id)}
@@ -79,7 +104,7 @@ const ContactsList = () => {
         ))}
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default ContactsList
+export default ContactsList;

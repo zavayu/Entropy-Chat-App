@@ -24,7 +24,8 @@ const ProfilePage = () => {
             {/* Name */}
             <div className="space-y-1.5">
               <div className="flex items-center text-sm pl-1">
-                <img src="/person.svg" alt="Email Address" className="size-5"/>
+                <img src="/person.svg" alt="Name" className="size-5 dark:hidden"/>
+                <img src="/person-white.svg" alt="Name" className="size-5 hidden dark:inline"/>
                 <span className="font-semibold px-2">Name</span>
               </div>
               <p className="bg-gray-200 rounded-lg border border-gray-300 px-6 py-2 text-black">{authUser.name}</p>
@@ -33,7 +34,8 @@ const ProfilePage = () => {
             {/* Email */}
             <div className="space-y-1.5">
               <div className="flex items-center text-sm pl-1">
-                <img src="/mail.svg" alt="Email Address" className="size-5"/>
+                <img src="/mail.svg" alt="Email Address" className="size-5 dark:hidden"/>
+                <img src="/mail-white.svg" alt="Email Address" className="size-5 hidden dark:inline"/>
                 <span className="font-semibold px-2">Email</span>
               </div>
               <p className="bg-gray-200 rounded-lg border border-gray-300 px-6 py-2 text-black">{authUser.email}</p>
@@ -44,7 +46,8 @@ const ProfilePage = () => {
         {/* Logout Button */}
         <button onClick={logout} className="absolute right-10 bottom-10 flex">
           <span className="text-lg font-semibold underline pr-2">Logout</span>
-          <img src="/logout_icon.svg" alt="Logout" className="size-9 -translate-y-1"/>
+          <img src="/logout_icon.svg" alt="Logout" className="size-9 -translate-y-1 dark:hidden"/>
+          <img src="/logout-white.svg" alt="Logout" className="size-9 -translate-y-1 hidden dark:inline"/>
           </button>
       </div>
     </div>

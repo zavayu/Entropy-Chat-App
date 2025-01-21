@@ -7,6 +7,7 @@ export const useChatStore = create((set, get) => ({
   users: [],
   selectedUser: null,
   selectedChat: null,
+  showSelectedProfile: false,
   contacts: [],
   chats: [],
 
@@ -66,6 +67,8 @@ export const useChatStore = create((set, get) => ({
   setSelectedUser: (selectedUser) => set({ selectedUser }),
 
   setSelectedChat: (selectedChat) => set({ selectedChat }),
+
+  setShowSelectedProfile: (showSelectedProfile) => set({ showSelectedProfile }),
 
   getContacts: async () => {
     try {

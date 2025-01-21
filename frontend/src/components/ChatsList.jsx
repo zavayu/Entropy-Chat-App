@@ -11,6 +11,7 @@ const ChatsList = () => {
     selectedChat,
     setSelectedUser,
     setSelectedChat,
+    setShowSelectedProfile,
   } = useChatStore();
   const { authUser } = useAuthStore();
   const lastMessage = useState(null);
@@ -68,6 +69,7 @@ const ChatsList = () => {
                   onClick={() => {
                     setSelectedUser(otherChatter);
                     setSelectedChat(chat);
+                    setShowSelectedProfile(false);
                   }}
                   className={`pr-3 rounded-2xl h-24 transition-colors ring-1 ${
                     selectedUser?._id === otherChatter._id
