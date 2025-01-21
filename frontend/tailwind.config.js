@@ -57,7 +57,7 @@ export default {
           "base-100": "2A2E32",
           "base-200": "D1D1D6",
           "base-300": "7C8188",
-          "accent": "#6AA6FF",
+          "accent": "#376CDF",
           "accent-content": "#FFF9F9",
           "neutral": "898989",
           "base-content": "#FFFFFF",
@@ -65,4 +65,5 @@ export default {
       },
     ],
   },
+  darkMode: ['selector', '[data-theme="dark"]'],
 };

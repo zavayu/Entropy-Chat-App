@@ -18,7 +18,7 @@ const ProfilePage = () => {
         {/* Profile Information */}
         <main className="justify-self-center justify-center items-center p-32">
           {/* TODO: Implement Upload Picture */}
-          <img src={authUser.profilePic} alt="Profile Picture" className="size-64 border-4 rounded-full  border-gray-300"/>
+          <img src={authUser.profilePic} alt="Profile Picture" className="size-64 border-4 rounded-full  border-gray-300 dark:border-gray-400"/>
           <div className="pt-6 space-y-6">
 
             {/* Name */}
@@ -27,7 +27,7 @@ const ProfilePage = () => {
                 <img src="/person.svg" alt="Email Address" className="size-5"/>
                 <span className="font-semibold px-2">Name</span>
               </div>
-              <p className="bg-gray-200 rounded-lg border border-gray-300 px-6 py-2">{authUser.name}</p>
+              <p className="bg-gray-200 rounded-lg border border-gray-300 px-6 py-2 text-black">{authUser.name}</p>
             </div>
 
             {/* Email */}
@@ -36,7 +36,7 @@ const ProfilePage = () => {
                 <img src="/mail.svg" alt="Email Address" className="size-5"/>
                 <span className="font-semibold px-2">Email</span>
               </div>
-              <p className="bg-gray-200 rounded-lg border border-gray-300 px-6 py-2">{authUser.email}</p>
+              <p className="bg-gray-200 rounded-lg border border-gray-300 px-6 py-2 text-black">{authUser.email}</p>
             </div>
 
           </div>

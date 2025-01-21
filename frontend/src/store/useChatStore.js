@@ -1,15 +1,25 @@
 import { create } from "zustand";
 import { axiosInstance } from "../lib/axios.js";
 import toast from "react-hot-toast";
-import { useAuthStore } from '../store/useAuthStore';
 
-export const useChatStore = create((set) => ({
+export const useChatStore = create((set, get) => ({
   messages: [],
   users: [],
   selectedUser: null,
   selectedChat: null,
   contacts: [],
   chats: [],
+
+  getUserFromEmail: async (email) => {
+    try {
+      const res = await axiosInstance.get(`/user/getUserFromEmail/${email}`);
+      return res.data;
+    } catch (error) {
+      toast.error(error.response.data.message);
+      console.log("Error fetching user: ", error.message);
+      return null;
+    }
+  },
 
   getUsers: async () => {
     try {
@@ -21,9 +31,9 @@ export const useChatStore = create((set) => ({
     }
   },
 
-  getMessages: async (userId) => {
+  getMessages: async (chatId) => {
     try {
-      const res = await axiosInstance.get(`/messages/${userId}`);
+      const res = await axiosInstance.get(`/messages/chat/${chatId}`);
       set({ messages: res.data });
     } catch (error) {
       toast.error(error.response.data.message);
@@ -31,13 +41,24 @@ export const useChatStore = create((set) => ({
     }
   },
 
-  sendMessage: async (messageData) => {
+  getLastMessage: async (chatId) => {
     try {
-      const { selectedUser, messages } = get();
+      const res = await axiosInstance.get(`/messages/chat/${chatId}/last`);
+      return res.data;
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Failed to fetch last message");
+      console.error("Error fetching last message: ", error.message);
+      return null;
+    }
+  },
+
+  sendMessage: async (messageData) => {
+    const { selectedUser, messages } = get()
+    try {
       const res = await axiosInstance.post(`/messages/send/${selectedUser._id}`, messageData);
       set({ messages: [...messages, res.data] });
     } catch (error) {
-      toast.error(error.response.data.message);
+      toast.error(error.response?.data?.message);
       console.log("Error sending message: ", error.message);
     }
   },
@@ -51,7 +72,7 @@ export const useChatStore = create((set) => ({
       const res = await axiosInstance.get(`/user/getContacts`);
       set({ contacts: res.data });
     } catch (error) {
-      toast.error(error.response.data.message);
+      toast.error(error.response?.data?.message);
       console.log("Error fetching contacts: ", error.message);
     }
   },
@@ -72,10 +93,12 @@ export const useChatStore = create((set) => ({
       const updatedChats = await Promise.all(
         res.data.map(async (chat) => {
           const otherChatter = await axiosInstance.get(`/chat/getOtherChatters/${chat._id}`);
+          const lastMessage = await axiosInstance.get(`/messages/chat/${chat._id}/last`);
 
           return {
             ...chat,
             otherChatter,
+            lastMessage,
           };
         })
       );
@@ -84,6 +107,18 @@ export const useChatStore = create((set) => ({
     } catch (error) {
       toast.error(error.response?.data?.message || "Error fetching chats");
       console.log("Error fetching chats: ", error.message);
+    }
+  },
+
+  createChat: async (user, otherUser) => {
+    try {
+      console.log("user: ", user._id, "otherUser: ", otherUser._id);
+      const res = await axiosInstance.post(`/chat/createChat`, { userIds: [user._id, otherUser._id] });
+      set({ selectedChat: res.data.chat });
+      set({ chats: [...chats, res.data] });
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Error creating chat");
+      console.log("Error creating chat: ", error.message);
     }
   },
 }));
