@@ -14,7 +14,8 @@ const ProfileDetails = () => {
           className="ml-auto"
           onClick={() => setShowSelectedProfile(false)}
         >
-          <img src="/info.svg" alt="Profile Info" />
+          <img src="/info.svg" alt="Profile Info" className="dark:hidden"/>
+          <img src="/info-white.svg" alt="Profile Info" className="hidden dark:inline"/>
         </button>
       </header>
 

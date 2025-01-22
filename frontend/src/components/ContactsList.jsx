@@ -1,17 +1,22 @@
 import React, { useEffect, useState } from "react";
 import { useChatStore } from "../store/useChatStore.js";
+import { useAuthStore } from "../store/useAuthStore.js";
 import { Link } from "react-router-dom";
 
 const ContactsList = () => {
   const {
     getContacts,
     contacts,
-    selectedUser,
+    chats,
+    createChat,
     setSelectedUser,
     deleteContact,
     setShowSelectedProfile,
   } = useChatStore();
+
   const [menuVisible, setMenuVisible] = useState(null);
+  const { authUser } = useAuthStore();
+
   useEffect(() => {
     getContacts();
   }, [getContacts]);
@@ -24,6 +29,21 @@ const ContactsList = () => {
     console.log(`Deleting contact with ID: ${userId}`);
     deleteContact(userId);
     setMenuVisible(null);
+  };
+
+  const handleMessageButtonClick = async (user) => {
+    setSelectedUser(user);
+    // Check if a chat already exists
+    let chat = chats.find(
+      (chat) =>
+        chat.chatters.some((u) => u._id === user._id) &&
+        chat.chatters.some((u) => u._id === authUser._id)
+    );
+
+    // If no chat exists, create a new one
+    if (!chat) {
+      createChat(authUser, user);
+    }
   };
 
   return (
@@ -58,10 +78,14 @@ const ContactsList = () => {
             </div>
 
             <div className="justify-self-end flex gap-4 pr-4 items-center">
+              {/* Message Button */}
               <Link to="/" className="pt-1">
                 <button
                   className="rounded-full size-14 bg-lightgray-300 justify-items-center hover:bg-gray-400"
-                  onClick={() => setSelectedUser(user)}
+                  onClick={() => {
+                    setSelectedUser(user);
+                    handleMessageButtonClick(user);
+                  }}
                 >
                   <img
                     src="/message_icon.svg"
@@ -71,6 +95,7 @@ const ContactsList = () => {
                 </button>
               </Link>
 
+              {/* 3 Dots Button */}
               <button
                 className="btn rounded-full size-14 border-lightgray-300 bg-lightgray-300 justify-items-center hover:bg-gray-400"
                 onClick={() => toggleMenu(user._id)}
@@ -82,7 +107,7 @@ const ContactsList = () => {
                 <div className="absolute -right-28 mt-20 w-40 bg-white border border-gray-300 rounded-md shadow-lg z-10">
                   <Link to="/">
                     <button
-                      className="block w-full text-left px-4 py-2 text-sm hover:bg-gray-100"
+                      className="block w-full text-left px-4 py-2 text-sm hover:bg-gray-100 hover:rounded-md text-black"
                       onClick={() => {
                         setSelectedUser(user);
                         setShowSelectedProfile(true);
@@ -92,7 +117,7 @@ const ContactsList = () => {
                     </button>
                   </Link>
                   <button
-                    className="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-100"
+                    className="block w-full text-left px-4 py-2 text-sm text-red-600 hover:rounded-md hover:bg-red-100"
                     onClick={() => handleDeleteContact(user._id)}
                   >
                     Delete Contact

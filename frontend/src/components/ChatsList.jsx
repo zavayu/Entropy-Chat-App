@@ -3,7 +3,6 @@ import { useChatStore } from "../store/useChatStore.js";
 import { useAuthStore } from "../store/useAuthStore";
 
 const ChatsList = () => {
-  const [hasChats, setHasChats] = useState(true);
   const {
     chats,
     getChats,
@@ -15,16 +14,27 @@ const ChatsList = () => {
   } = useChatStore();
   const { authUser } = useAuthStore();
   const lastMessage = useState(null);
+  const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
     getChats();
-  }, [getChats]);
+  }, [getChats, chats]);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    console.log("Searching...");
-    // BACKEND GOES HERE
-  };
+  const sortedChats = chats.slice().sort((a, b) => {
+    const aLastMessage = a.lastMessage?.data?.createdAt;
+    const bLastMessage = b.lastMessage?.data?.createdAt;
+    return new Date(bLastMessage) - new Date(aLastMessage);
+  });
+
+  const filteredChats = sortedChats.filter((chat) => {
+    const otherChatter = chat.otherChatter?.data?.[0];
+    if (!otherChatter) return false;
+    const searchLower = searchQuery.toLowerCase();
+    return (
+      otherChatter.name.toLowerCase().startsWith(searchLower) ||
+      otherChatter.email.toLowerCase().startsWith(searchLower)
+    );
+  });
 
   return (
     <div className="bg-secondary h-screen w-1/5 min-w-72 justify-center hidden sm:inline px-4 border-r-4 border-neutral overflow-hidden">
@@ -32,13 +42,13 @@ const ChatsList = () => {
       <header className="h-1/5 min-h-48">
         <h2 className="text-5xl font-bold py-8 pl-2">Chats</h2>
         {/* Search Bar */}
-        <form onSubmit={handleSubmit}>
+        <form>
           <label className="input input-bordered flex items-center rounded-full bg-gray-100 dark:bg-gray-300">
-            <input type="text" className="grow" placeholder="Search" />
+            <input type="text" className="grow" placeholder="Search" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)}/>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 16 16"
-              fill="currentColor"
+              fill="black"
               className="h-4 w-4 opacity-70"
             >
               <path
@@ -53,13 +63,13 @@ const ChatsList = () => {
       </header>
 
       {/* Chats List */}
-      <div className="justify-center text-center overflow-y-auto h-4/5">
-        {hasChats ? (
+      <div className="justify-center text-center overflow-y-auto h-4/5 pb-6">
+        {filteredChats.length > 0 ? (
           <div className="grid grid-cols-1 gap-6 pt-2">
-            {chats.map((chat) => {
+            {filteredChats.map((chat) => {
               // Each chat now has `otherChatter` inside it
-              const otherChatter = chat.otherChatter.data[0]; // directly access the other chatter
-              const lastMessage = chat.lastMessage.data; // directly access the last message
+              const otherChatter = chat.otherChatter?.data?.[0]; // directly access the other chatter
+              const lastMessage = chat.lastMessage?.data; // directly access the last message
 
               if (!otherChatter) return null;
 
@@ -87,12 +97,12 @@ const ChatsList = () => {
                       <h3 className="font-semibold text-lg">
                         {otherChatter.name}
                       </h3>
-                      {/* TODO: Add last message sent */}
-                      <p className="text-sm truncate max-w-44">
+                      {/* last message sent */}
+                      <p className="text-sm truncate max-w-32">
                         {lastMessage ? lastMessage.text : "No messages yet"}
                       </p>
                     </div>
-                    {/* TODO: Add time of last message */}
+                    {/* time of last message */}
                     <p className="justify-self-end ml-auto pr-1 text-xs">
                       {lastMessage
                         ? new Date(lastMessage.createdAt).toLocaleTimeString(
@@ -102,7 +112,7 @@ const ChatsList = () => {
                               minute: "2-digit",
                             }
                           )
-                        : "No messages yet"}
+                        : "N/A"}
                     </p>
                   </div>
                 </button>
@@ -110,7 +120,7 @@ const ChatsList = () => {
             })}
           </div>
         ) : (
-          <span className="text-gray-500">No recent messages</span>
+          <span className="text-gray-500 dark:text-[#d8d8d8]">No recent messages</span>
         )}
       </div>
     </div>

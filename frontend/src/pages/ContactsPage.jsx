@@ -15,10 +15,14 @@ const ContactsPage = () => {
   }, [getContacts])
 
   const handleSubmit = async (e) => {
-    console.log("Searching for user with email: ", email);
+    //console.log("Searching for user with email: ", email);
     e.preventDefault();
+
     await addContact(email);
     await getContacts(authUser._id);
+
+    setEmail("");
+    setAddingContact(false);
   }
 
   return (
@@ -30,7 +34,7 @@ const ContactsPage = () => {
         {/* Header Title */}
         <header className="pl-12 px-24 pt-7 pb-6">
           <span className="text-5xl font-bold pl-7 pb-4"> Contacts</span>
-          <hr className="w-10/12 border-2 m-0 fixed top-24" />
+          <hr className="w-10/12 border-2 border-neutral m-0 fixed top-24" />
 
           {/* Add Contact Button */}
           <button onClick={() => setAddingContact(!addingContact)}>
@@ -39,11 +43,12 @@ const ContactsPage = () => {
           </button>
 
           {/* Add Contact Card */}
-          <div className={`card bg-base-100 shadow-xl fixed w-96 h-44 justify-center ${addingContact ? "right-60 translate-y-2 z-10" : "hidden"}`}>
+          <div className={`card bg-base-100 shadow-xl fixed w-96 h-44 justify-center ${addingContact ? "right-60 translate-y-2 z-10 dark:border-2 border-neutral" : "hidden"}`}>
             <div className="card-body">
               <h2 className="card-title">Add new contact</h2>
               <div className="flex">
-                <img src="/mail.svg" alt="Mail icon" className="size-5 translate-y-0" />
+                <img src="/mail.svg" alt="Mail icon" className="size-5 translate-y-0 dark:hidden" />
+                <img src="/mail-white.svg" alt="Mail icon" className="size-5 translate-y-0 hidden dark:inline" />
                 <p className="text-sm pl-2">You can add friends with their email</p>
               </div>
               <div className="card-actions justify-start">

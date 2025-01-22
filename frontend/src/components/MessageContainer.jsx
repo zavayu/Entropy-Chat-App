@@ -24,7 +24,7 @@ const MessageContainer = () => {
     }
   }, [messages]);
 
-  console.log("messages:", messages);
+  //console.log("messages:", messages);
 
   return (
     <div className="bg-primary h-screen w-4/5 hidden sm:inline">

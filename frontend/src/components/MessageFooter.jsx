@@ -8,7 +8,7 @@ const MessageFooter = () => {
 
   const handleSendMessage = async(e) => {
     e.preventDefault();
-    console.log("Sending message: ", text);
+    //console.log("Sending message: ", text);
     if (!text.trim()) return;
     try {
       await sendMessage({

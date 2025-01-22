@@ -7,20 +7,29 @@ import useLocalStorage from "use-local-storage";
 const Sidebar = () => {
   const [newMessage, setNewMessage] = useState(false);
   const { authUser } = useAuthStore();
-  const { selectedUser, setSelectedUser, getUserFromEmail, createChat } =
+  const { selectedUser, setSelectedUser, getUserFromEmail, createChat, chats } =
     useChatStore();
   const [email, setEmail] = useState("");
   const [isDark, setIsDark] = useLocalStorage("isDark", false);
 
   const handleSubmit = async (e) => {
-    console.log("Searching for user with email: ", email);
     e.preventDefault();
     const otherUser = await getUserFromEmail(email);
-    if (otherUser) {
+
+    if (otherUser && otherUser._id !== authUser._id) {
       setSelectedUser(otherUser);
-      createChat(authUser, otherUser);
+      let chat = chats.find(
+        (chat) =>
+          chat.chatters.some((u) => u._id === otherUser._id) &&
+          chat.chatters.some((u) => u._id === authUser._id)
+      );
+      // If no chat exists, create a new one
+      if (!chat) {
+        createChat(authUser, otherUser);
+      }
     }
     setNewMessage(false);
+    setEmail("");
   };
 
   return (
@@ -57,7 +66,7 @@ const Sidebar = () => {
 
         {/*New Messages Pop-up:*/}
         <div
-          className={`card bg-base-100 shadow-xl fixed w-96 h-44 justify-center ${
+          className={`card bg-base-100 shadow-xl fixed w-96 h-44 justify-center dark:border-2 border-neutral ${
             newMessage ? "left-24 -translate-y-5 z-10" : "hidden"
           }`}
         >
@@ -104,7 +113,6 @@ const Sidebar = () => {
         <input
           type="checkbox"
           className="toggle toggle-info"
-          defaultChecked
           checked={isDark}
           onChange={() => setIsDark(!isDark)}
         />

@@ -104,6 +104,7 @@ export const useChatStore = create((set, get) => ({
       console.log("Error deleting contact: ", error.message);
     }
   },
+
   getChats: async () => {
     try {
       const res = await axiosInstance.get(`/chat/getChats`);
@@ -131,8 +132,12 @@ export const useChatStore = create((set, get) => ({
     try {
       console.log("user: ", user._id, "otherUser: ", otherUser._id);
       const res = await axiosInstance.post(`/chat/createChat`, { userIds: [user._id, otherUser._id] });
+      const { chats } = get();
       set({ selectedChat: res.data.chat });
-      set({ chats: [...chats, res.data] });
+      set({ chats: [...chats, res.data.chat] });
+      //console.log("Current chats: ", chats);
+      console.log("CHATS: ", get().chats);
+      toast.success("Chat created successfully");
     } catch (error) {
       toast.error(error.response?.data?.message || "Error creating chat");
       console.log("Error creating chat: ", error.message);
