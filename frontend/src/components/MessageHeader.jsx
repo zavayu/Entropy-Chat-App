@@ -18,7 +18,7 @@ const MessageHeader = () => {
         </p>
       </div>
 
-      <button className="ml-auto" onClick={() => setShowSelectedProfile(true)}>
+      <button className="ml-auto  transition-transform transform hover:scale-110 " onClick={() => setShowSelectedProfile(true)}>
         <img src="/info.svg" alt="Profile Info" className="dark:hidden"/>
         <img src="/info-white.svg" alt="Profile Info" className="hidden dark:inline"/>
       </button>

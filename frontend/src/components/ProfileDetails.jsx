@@ -11,7 +11,7 @@ const ProfileDetails = () => {
         </span>
 
         <button
-          className="ml-auto"
+          className="ml-auto transition-transform transform hover:scale-110"
           onClick={() => setShowSelectedProfile(false)}
         >
           <img src="/info.svg" alt="Profile Info" className="dark:hidden"/>

@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { useChatStore } from "../store/useChatStore.js";
-import { useAuthStore } from "../store/useAuthStore";
 
 const ChatsList = () => {
   const {
@@ -12,8 +11,6 @@ const ChatsList = () => {
     setSelectedChat,
     setShowSelectedProfile,
   } = useChatStore();
-  const { authUser } = useAuthStore();
-  const lastMessage = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
@@ -44,7 +41,13 @@ const ChatsList = () => {
         {/* Search Bar */}
         <form>
           <label className="input input-bordered flex items-center rounded-full bg-gray-100 dark:bg-gray-300">
-            <input type="text" className="grow" placeholder="Search" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)}/>
+            <input
+              type="text"
+              className="grow placeholder-slate-700"
+              placeholder="Search"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 16 16"
@@ -83,18 +86,20 @@ const ChatsList = () => {
                   }}
                   className={`pr-3 rounded-2xl h-24 transition-colors ring-1 ${
                     selectedUser?._id === otherChatter._id
-                      ? "hover:bg-accent bg-accent text-white ring-blue-200 dark:ring-blue-700"
-                      : "bg-base-300 hover:bg-base-300 ring-gray-200 dark:ring-gray-700"
+                      ? " bg-accent dark:hover:bg-blue-500 hover:bg-[#85beff] text-white ring-blue-200 dark:ring-blue-700"
+                      : "bg-base-300 dark:hover:bg-gray-400 hover:bg-[#d6d6d6] ring-gray-200 dark:ring-gray-700"
                   }`}
                 >
                   <div className="flex items-center justify-start mx-auto pl-4">
+                    {/* profile picture of other chatter */}
                     <img
                       src={otherChatter.profilePic}
                       alt={otherChatter.name}
                       className="size-12 rounded-full"
                     />
                     <div className="pl-4 text-start">
-                      <h3 className="font-semibold text-lg">
+                      {/* name of other chatter */}
+                      <h3 className="font-semibold text-lg text-nowrap truncate max-w-30 shrink">
                         {otherChatter.name}
                       </h3>
                       {/* last message sent */}
@@ -103,7 +108,7 @@ const ChatsList = () => {
                       </p>
                     </div>
                     {/* time of last message */}
-                    <p className="justify-self-end ml-auto pr-1 text-xs">
+                    <p className="justify-self-end ml-auto pr-1 text-xs text-nowrap overflow-x-hidden">
                       {lastMessage
                         ? new Date(lastMessage.createdAt).toLocaleTimeString(
                             [],
@@ -120,7 +125,14 @@ const ChatsList = () => {
             })}
           </div>
         ) : (
-          <span className="text-gray-500 dark:text-[#d8d8d8]">No recent messages</span>
+          <div>
+            <span className={`text-gray-500 dark:text-[#d8d8d8] ${searchQuery ? "hidden" : ""}`}>
+              No recent messages
+            </span>
+            <span className={`text-gray-500 dark:text-[#d8d8d8] ${searchQuery ? "" : "hidden"}`}>
+              Chat not found
+            </span>
+          </div>
         )}
       </div>
     </div>
