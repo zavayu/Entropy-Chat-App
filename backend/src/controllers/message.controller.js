@@ -1,5 +1,7 @@
 import Message from "../models/message.model.js";
 import User from "../models/user.model.js";
+import { io } from "../server.js";
+
 
 export const getUsers = async(req, res) => {
   try {
@@ -77,7 +79,7 @@ export const sendMessage = async(req, res) => {
 
     await newMessage.save();
 
-    // TODO: Realtime functionality
+    io.emit("newMessage", newMessage);
 
     res.status(201).json(newMessage);
 

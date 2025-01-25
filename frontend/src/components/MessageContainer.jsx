@@ -8,7 +8,7 @@ import Picker from "@emoji-mart/react";
 
 
 const MessageContainer = () => {
-  const { messages, getMessages, selectedUser, selectedChat } = useChatStore();
+  const { messages, getMessages, selectedUser, selectedChat, chats, getChats } = useChatStore();
   const { authUser } = useAuthStore();
   const messagesEndRef = useRef(null);
   const lastMessageRef = useRef(null);
@@ -85,7 +85,7 @@ const MessageContainer = () => {
                   <div
                     className={`chat-bubble ${
                       message.senderId !== authUser._id
-                        ? "text-black bg-white"
+                        ? "text-black dark:text-white bg-white dark:bg-secondary"
                         : "text-white chat-bubble-accent"
                     }`}
                   >

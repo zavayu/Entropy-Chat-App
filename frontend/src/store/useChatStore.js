@@ -1,6 +1,9 @@
 import { create } from "zustand";
 import { axiosInstance } from "../lib/axios.js";
 import toast from "react-hot-toast";
+import { io } from "socket.io-client";
+
+const socket = io("http://localhost:5000");
 
 export const useChatStore = create((set, get) => ({
   messages: [],
@@ -120,7 +123,7 @@ export const useChatStore = create((set, get) => ({
           };
         })
       );
-  
+
       set({ chats: updatedChats });
     } catch (error) {
       toast.error(error.response?.data?.message || "Error fetching chats");
@@ -144,3 +147,11 @@ export const useChatStore = create((set, get) => ({
     }
   },
 }));
+
+// Listen for new messages
+socket.on("newMessage", (message) => {
+  const { messages, selectedChat } = useChatStore.getState();
+  if (message.chatId === selectedChat._id) {
+    useChatStore.setState({ messages: [...messages, message] });
+  }
+});

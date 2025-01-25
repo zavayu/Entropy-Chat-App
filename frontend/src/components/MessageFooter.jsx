@@ -16,6 +16,7 @@ const MessageFooter = ({
   };
 
   const handleFileChange = (event) => {
+    e.preventDefault();
     const file = event.target.files[0];
     if (file) {
       // Handle the file upload logic here
@@ -54,9 +55,9 @@ const MessageFooter = ({
         className="pr-4 flex items-center gap-2"
       >
         {/* File Input */}
-        <button onClick={handleButtonClick} className="absolute left-6">
+        <button onClick={handleButtonClick} className="absolute left-6" type="button">
           <img src="/attach_file.svg" alt="Attach File" />
-        </button>
+        </button >
         <input
             type="file"
             ref={fileInputRef}
