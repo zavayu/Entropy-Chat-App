@@ -8,7 +8,7 @@ import Picker from "@emoji-mart/react";
 
 
 const MessageContainer = () => {
-  const { messages, getMessages, selectedUser, selectedChat, chats, getChats } = useChatStore();
+  const { messages, getMessages, selectedChat } = useChatStore();
   const { authUser } = useAuthStore();
   const messagesEndRef = useRef(null);
   const lastMessageRef = useRef(null);
@@ -49,7 +49,6 @@ const MessageContainer = () => {
 
   const handleEmojiSelect = (emoji) => {
     setSelectedEmoji(emoji);
-    //console.log("Selected emoji:", emoji.native);
   };
 
   return (
@@ -58,7 +57,7 @@ const MessageContainer = () => {
       <MessageHeader />
 
       {/* Messages */}
-      <div className="h-3/4 overflow-y-auto px-10 py-6">
+      <div className="h-3/4 overflow-y-auto overflow-x-hidden px-10 py-6">
         {messages.length > 0 ? (
           messages.map((message, index) => {
             const previousMessage = messages[index - 1];
@@ -76,20 +75,28 @@ const MessageContainer = () => {
                   </div>
                 )}
                 <div
-                  className={`chat max-w-[60%] ${
+                  className={`chat ${
                     message.senderId !== authUser._id
                       ? "chat-start"
-                      : "text-white justify-self-end chat-end"
+                      : "text-white chat-end"
                   }`}
                 >
                   <div
-                    className={`chat-bubble ${
+                    className={`chat-bubble max-w-[60%] ${
                       message.senderId !== authUser._id
                         ? "text-black dark:text-white bg-white dark:bg-secondary"
                         : "text-white chat-bubble-accent"
                     }`}
+                    style={{ wordBreak: "break-word" }}
                   >
-                    {message.text}
+                    <p className="text-wrap">{message.text}</p>
+                    {message.image && (
+                      <img
+                        src={message.image}
+                        alt="Message"
+                        className="w-48 h-48 rounded-md mt-2"
+                      />
+                    )}
                   </div>
                   {/* Reference to the last message */}
                   {index === messages.length - 1 && (

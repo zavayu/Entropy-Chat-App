@@ -1,6 +1,7 @@
 import Message from "../models/message.model.js";
 import User from "../models/user.model.js";
 import { io } from "../server.js";
+import cloudinary from "../lib/cloudinary.js";
 
 
 export const getUsers = async(req, res) => {
@@ -63,10 +64,11 @@ export const sendMessage = async(req, res) => {
     const { id:receiverId } = req.params;
     const senderId = req.user._id;
 
-    // TODO : case of Image message
     let imageUrl;
     if (image) {
-      imageUrl = "";
+      const uploadResponse = await cloudinary.uploader.upload(image);
+      imageUrl = uploadResponse.secure_url;
+      console.log("imageUrl: ", imageUrl);
     }
 
     const newMessage = new Message ({

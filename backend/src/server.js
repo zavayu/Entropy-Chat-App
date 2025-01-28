@@ -4,7 +4,7 @@ import authRoutes from "./routes/auth.routes.js";
 import messageRoutes from "./routes/message.routes.js";
 import userRoutes from "./routes/user.routes.js";
 import chatRoutes from "./routes/chat.routes.js";
-import connectToMongoDB from "./db/connectToMongoDB.js";
+import connectToMongoDB from "./lib/connectToMongoDB.js";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import { Server } from "socket.io";
@@ -21,7 +21,7 @@ const io = new Server(server, {
 });
 const PORT = process.env.PORT;
 
-app.use(express.json()); // to parse json data
+app.use(express.json({limit: '2mb'})); // to parse json data
 app.use(cookieParser()); // to parse cookie
 app.use(cors({
   origin: "http://localhost:5173",
@@ -45,7 +45,6 @@ io.on("connection", (socket) => {
   });
 });
 
-// TODO: Change whitelisted IP's on DB to avoid errors
 server.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)
   connectToMongoDB();

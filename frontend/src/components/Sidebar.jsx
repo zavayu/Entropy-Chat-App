@@ -143,11 +143,12 @@ const Sidebar = () => {
 
       {/*Profile Picture:*/}
       <div className="pt-[18dvh] grid justify-center gap-3">
-        <Link to={"/profile"}>
+        <a alt="" className="size-20 absolute justify-self-center rounded-full bg-slate-400 z-10"/>
+        <Link to={"/profile"} className="z-20">
           <img
             src={authUser.profilePic}
             alt="Profile"
-            className="size-20 rounded-full border-2 border-gray-300"
+            className="size-20 rounded-full border-2 border-gray-300 hover:opacity-75"
           />
         </Link>
       </div>

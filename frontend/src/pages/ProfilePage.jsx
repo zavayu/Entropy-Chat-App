@@ -1,20 +1,27 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import Sidebar from "../components/Sidebar";
 import { useAuthStore } from "../store/useAuthStore";
 
 const ProfilePage = () => {
-  const { authUser, logout } = useAuthStore();
+  const { authUser, logout, updateProfile } = useAuthStore();
   const fileInputRef = useRef(null);
+  const [selectedImage, setSelectedImage] = useState(null);
 
   const handleButtonClick = () => {
     fileInputRef.current.click();
   };
 
-  const handleFileChange = (event) => {
-    const file = event.target.files[0];
+  const handleImageUpload = async (e) => {
+    const file = e.target.files[0];
     if (file) {
-      // Handle the file upload logic here
-      console.log("Selected file:", file);
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+
+      reader.onload = async () => {
+        const base64Image = reader.result;
+        setSelectedImage(base64Image);
+        await updateProfile({ profilePic: base64Image });
+      }
     }
   };
 
@@ -44,7 +51,7 @@ const ProfilePage = () => {
             </div>
 
             <img
-              src={authUser.profilePic}
+              src={selectedImage || authUser.profilePic}
               alt="Profile Picture"
               className="size-64 border-4 rounded-full border-gray-300 dark:border-gray-400"
             />
@@ -53,7 +60,8 @@ const ProfilePage = () => {
             type="file"
             ref={fileInputRef}
             className="hidden"
-            onChange={handleFileChange}
+            accept="image/*"
+            onChange={handleImageUpload}
           />
 
           <div className="pt-6 space-y-6">

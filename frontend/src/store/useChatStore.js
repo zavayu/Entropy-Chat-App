@@ -59,10 +59,12 @@ export const useChatStore = create((set, get) => ({
   sendMessage: async (messageData) => {
     const { selectedUser, messages } = get()
     try {
+      console.log("Sending message to: ", selectedUser._id);
+      console.log("Message data: ", messageData);
       const res = await axiosInstance.post(`/messages/send/${selectedUser._id}`, messageData);
       set({ messages: [...messages, res.data] });
     } catch (error) {
-      toast.error(error.response?.data?.message);
+      toast.error(error.response?.data?.message || "Image size exceeds 2MB capacity");
       console.log("Error sending message: ", error.message);
     }
   },

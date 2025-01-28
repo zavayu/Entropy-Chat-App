@@ -10,17 +10,30 @@ const MessageFooter = ({
   const [text, setText] = useState("");
   const { sendMessage } = useChatStore();
   const fileInputRef = useRef(null);
+  const [selectedImage, setSelectedImage] = useState(null);
 
   const handleButtonClick = () => {
     fileInputRef.current.click();
   };
 
-  const handleFileChange = (event) => {
+  const handleImageUpload = (e) => {
     e.preventDefault();
-    const file = event.target.files[0];
+    const file = e.target.files[0];
     if (file) {
-      // Handle the file upload logic here
-      console.log("Selected file:", file);
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+
+      reader.onload = async () => {
+        const base64Image = reader.result;
+        setSelectedImage(base64Image);
+      };
+    }
+  };
+
+  const removeImage = () => {
+    setSelectedImage(null);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = null;
     }
   };
 
@@ -33,15 +46,18 @@ const MessageFooter = ({
 
   const handleSendMessage = async (e) => {
     e.preventDefault();
-    //console.log("Sending message: ", text);
-    if (!text.trim()) return;
+    if (!text.trim() && !selectedImage) return;
     try {
       await sendMessage({
         text: text.trim(),
-        image: null,
+        image: selectedImage,
         chatId: selectedChat._id,
       });
       setText("");
+      setSelectedImage(null);
+      if (fileInputRef.current) {
+        fileInputRef.current.value = null;
+      }
       setShowEmojiSelector(false);
     } catch (error) {
       console.log("Error sending message: ", error.message);
@@ -49,21 +65,43 @@ const MessageFooter = ({
   };
 
   return (
-    <div className="fixed bottom-0 h-32 w-4/5 items-center py-7 pl-16 pr-40 bg-secondary border-neutral border-t-4">
+    <div className="fixed bottom-0 w-4/5 items-center py-7 pl-16 pr-40 bg-secondary border-neutral border-t-4">
+
+      {/* Display currently selected image */}
+      {selectedImage && (
+        <div className="absolute bottom-36 px-6 py-1 bg-[#5f728a] place-items-center place-content-center rounded-md">
+          <button
+            className="absolute -top-4 -right-5 size-10 rounded-md bg-[#364c69]"
+            onClick={removeImage}
+          >
+            <img
+              src="/trash.svg"
+              alt="Delete Image"
+              className="size-8 justify-self-center"
+            />
+          </button>
+          <img src={selectedImage} alt="Image" className="w-64" />
+        </div>
+      )}
+
       <form
         onSubmit={handleSendMessage}
         className="pr-4 flex items-center gap-2"
       >
-        {/* File Input */}
-        <button onClick={handleButtonClick} className="absolute left-6" type="button">
-          <img src="/attach_file.svg" alt="Attach File" />
-        </button >
+        {/* Image Input */}
+        <button
+          onClick={handleButtonClick}
+          className="absolute left-5"
+          type="button"
+        >
+          <img src="/image.svg" alt="Attach Image" className="size-[45px]"/>
+        </button>
         <input
-            type="file"
-            ref={fileInputRef}
-            className="hidden"
-            onChange={handleFileChange}
-          />
+          type="file"
+          ref={fileInputRef}
+          className="hidden"
+          onChange={handleImageUpload}
+        />
 
         {/* Message Input */}
         <div className="flex-1 flex gap-2 justify-center">
