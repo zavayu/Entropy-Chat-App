@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useChatStore } from "../store/useChatStore.js";
+import { useAuthStore } from "../store/useAuthStore.js";
 
 const ChatsList = () => {
   const {
@@ -11,6 +12,7 @@ const ChatsList = () => {
     setSelectedChat,
     setShowSelectedProfile,
   } = useChatStore();
+  const { onlineUsers } = useAuthStore();
   const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
@@ -92,11 +94,21 @@ const ChatsList = () => {
                 >
                   <div className="flex items-center justify-start mx-auto pl-4">
                     {/* profile picture of other chatter */}
-                    <img
-                      src={otherChatter.profilePic}
-                      alt={otherChatter.name}
-                      className="size-12 rounded-full"
-                    />
+                    <div className="relative">
+                      <img
+                        src={otherChatter.profilePic}
+                        alt={otherChatter.name}
+                        className="min-w-12 min-h-12 size-12 rounded-full"
+                      />
+                      <span
+                        className={`absolute right-[-2px] bottom-[3px]  size-[11px] rounded-full ring-1 ring-zinc-900 ${
+                          onlineUsers.includes(otherChatter._id)
+                            ? "bg-green-400"
+                            : "bg-gray-500"
+                        }`}
+                      />
+                    </div>
+
                     <div className="pl-4 text-start">
                       {/* name of other chatter */}
                       <h3 className="font-semibold text-lg text-nowrap truncate max-w-30 shrink">
@@ -126,10 +138,18 @@ const ChatsList = () => {
           </div>
         ) : (
           <div>
-            <span className={`text-gray-500 dark:text-[#d8d8d8] ${searchQuery ? "hidden" : ""}`}>
+            <span
+              className={`text-gray-500 dark:text-[#d8d8d8] ${
+                searchQuery ? "hidden" : ""
+              }`}
+            >
               No recent messages
             </span>
-            <span className={`text-gray-500 dark:text-[#d8d8d8] ${searchQuery ? "" : "hidden"}`}>
+            <span
+              className={`text-gray-500 dark:text-[#d8d8d8] ${
+                searchQuery ? "" : "hidden"
+              }`}
+            >
               Chat not found
             </span>
           </div>

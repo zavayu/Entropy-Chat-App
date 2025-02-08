@@ -69,9 +69,9 @@ const MessageFooter = ({
 
       {/* Display currently selected image */}
       {selectedImage && (
-        <div className="absolute bottom-36 px-6 py-1 bg-[#5f728a] place-items-center place-content-center rounded-md">
+        <div className="absolute bottom-36 px-4 py-2 bg-[#5e81aa] dark:bg-neutral-800 border dark:border-black place-items-center place-content-center rounded-md">
           <button
-            className="absolute -top-4 -right-5 size-10 rounded-md bg-[#364c69]"
+            className="absolute -top-4 -right-5 size-10 rounded-md border-2 border-black bg-[#384e6b] dark:bg-neutral-800"
             onClick={removeImage}
           >
             <img
@@ -94,7 +94,8 @@ const MessageFooter = ({
           className="absolute left-5"
           type="button"
         >
-          <img src="/image.svg" alt="Attach Image" className="size-[45px]"/>
+          <img src="/image.svg" alt="Attach Image" className="size-[45px] dark:hidden"/>
+          <img src="/image-white.svg" alt="Attach Image" className="size-[45px] hidden dark:inline"/>
         </button>
         <input
           type="file"
@@ -125,7 +126,12 @@ const MessageFooter = ({
           <img
             src="/smile.svg"
             alt="Select Emoji"
-            className="size-9 transition-transform transform hover:scale-110"
+            className="size-9 transition-transform transform hover:scale-110 dark:hidden"
+          />
+          <img
+            src="/smile-white.svg"
+            alt="Select Emoji"
+            className="size-9 transition-transform transform hover:scale-110 dark:inline hidden"
           />
         </button>
         <button
@@ -136,7 +142,12 @@ const MessageFooter = ({
           <img
             src="/send.svg"
             alt="Send Message"
-            className="size-9 translate-x-3 transition-transform transform hover:scale-105"
+            className="size-9 translate-x-3 transition-transform transform hover:scale-105 dark:hidden"
+          />
+          <img
+            src="/send-white.svg"
+            alt="Send Message"
+            className="size-9 translate-x-3 transition-transform transform hover:scale-105 dark:block hidden"
           />
         </button>
       </form>

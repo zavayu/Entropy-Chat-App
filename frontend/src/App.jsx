@@ -10,8 +10,10 @@ import ContactsPage from "./pages/ContactsPage"
 import useLocalStorage from "use-local-storage"
 
 const App = () => {
-  const {authUser, checkAuth} = useAuthStore();
+  const {authUser, checkAuth, onlineUsers} = useAuthStore();
   const [isDark, setIsDark] = useLocalStorage("isDark", false);
+
+  console.log("online users:", onlineUsers);
 
   useEffect(() => {
     checkAuth()

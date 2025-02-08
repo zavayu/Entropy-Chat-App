@@ -8,7 +8,7 @@ import Picker from "@emoji-mart/react";
 
 
 const MessageContainer = () => {
-  const { messages, getMessages, selectedChat } = useChatStore();
+  const { messages, getMessages, selectedChat, subscribeToMessages, unsubscribeToMessages } = useChatStore();
   const { authUser } = useAuthStore();
   const messagesEndRef = useRef(null);
   const lastMessageRef = useRef(null);
@@ -18,8 +18,13 @@ const MessageContainer = () => {
   useEffect(() => {
     if (selectedChat) {
       getMessages(selectedChat._id);
+      subscribeToMessages();
+
+      return () => {
+        unsubscribeToMessages();
+      };
     }
-  }, [selectedChat, getMessages]);
+  }, [selectedChat, getMessages, subscribeToMessages, unsubscribeToMessages]);
 
   // Scroll to the bottom whenever messages change
   useEffect(() => {

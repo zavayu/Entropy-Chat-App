@@ -1,9 +1,7 @@
 import { create } from "zustand";
 import { axiosInstance } from "../lib/axios.js";
 import toast from "react-hot-toast";
-import { io } from "socket.io-client";
-
-const socket = io("http://localhost:5000");
+import { useAuthStore } from "./useAuthStore.js";
 
 export const useChatStore = create((set, get) => ({
   messages: [],
@@ -50,21 +48,28 @@ export const useChatStore = create((set, get) => ({
       const res = await axiosInstance.get(`/messages/chat/${chatId}/last`);
       return res.data;
     } catch (error) {
-      toast.error(error.response?.data?.message || "Failed to fetch last message");
+      toast.error(
+        error.response?.data?.message || "Failed to fetch last message"
+      );
       console.error("Error fetching last message: ", error.message);
       return null;
     }
   },
 
   sendMessage: async (messageData) => {
-    const { selectedUser, messages } = get()
+    const { selectedUser, messages } = get();
     try {
       console.log("Sending message to: ", selectedUser._id);
       console.log("Message data: ", messageData);
-      const res = await axiosInstance.post(`/messages/send/${selectedUser._id}`, messageData);
+      const res = await axiosInstance.post(
+        `/messages/send/${selectedUser._id}`,
+        messageData
+      );
       set({ messages: [...messages, res.data] });
     } catch (error) {
-      toast.error(error.response?.data?.message || "Image size exceeds 2MB capacity");
+      toast.error(
+        error.response?.data?.message || "Image size exceeds 2MB capacity"
+      );
       console.log("Error sending message: ", error.message);
     }
   },
@@ -97,8 +102,8 @@ export const useChatStore = create((set, get) => ({
 
   deleteContact: async (userId) => {
     try {
-      await axiosInstance.post('/user/deleteContact', {
-        id: userId
+      await axiosInstance.post("/user/deleteContact", {
+        id: userId,
       });
       set((state) => ({
         contacts: state.contacts.filter((contact) => contact._id !== userId),
@@ -115,8 +120,12 @@ export const useChatStore = create((set, get) => ({
       const res = await axiosInstance.get(`/chat/getChats`);
       const updatedChats = await Promise.all(
         res.data.map(async (chat) => {
-          const otherChatter = await axiosInstance.get(`/chat/getOtherChatters/${chat._id}`);
-          const lastMessage = await axiosInstance.get(`/messages/chat/${chat._id}/last`);
+          const otherChatter = await axiosInstance.get(
+            `/chat/getOtherChatters/${chat._id}`
+          );
+          const lastMessage = await axiosInstance.get(
+            `/messages/chat/${chat._id}/last`
+          );
 
           return {
             ...chat,
@@ -136,24 +145,35 @@ export const useChatStore = create((set, get) => ({
   createChat: async (user, otherUser) => {
     try {
       console.log("user: ", user._id, "otherUser: ", otherUser._id);
-      const res = await axiosInstance.post(`/chat/createChat`, { userIds: [user._id, otherUser._id] });
+      const res = await axiosInstance.post(`/chat/createChat`, {
+        userIds: [user._id, otherUser._id],
+      });
       const { chats } = get();
       set({ selectedChat: res.data.chat });
       set({ chats: [...chats, res.data.chat] });
-      //console.log("Current chats: ", chats);
-      console.log("CHATS: ", get().chats);
       toast.success("Chat created successfully");
     } catch (error) {
       toast.error(error.response?.data?.message || "Error creating chat");
       console.log("Error creating chat: ", error.message);
     }
   },
-}));
 
-// Listen for new messages
-socket.on("newMessage", (message) => {
-  const { messages, selectedChat } = useChatStore.getState();
-  if (message.chatId === selectedChat._id) {
-    useChatStore.setState({ messages: [...messages, message] });
-  }
-});
+  subscribeToMessages: () => {
+    const { selectedChat, messages } = get();
+    if (!selectedChat) return;
+
+    const socket = useAuthStore.getState().socket;
+
+    socket.on("newMessage", (message) => {
+      if (message.chatId !== selectedChat._id) return;
+      set((state) => ({
+        messages: [...state.messages, message],
+      }));
+    });
+  },
+
+  unsubscribeToMessages: () => {
+    const socket = useAuthStore.getState().socket;
+    socket.off("newMessage");
+  },
+}));

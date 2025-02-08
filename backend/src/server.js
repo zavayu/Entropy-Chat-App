@@ -7,18 +7,10 @@ import chatRoutes from "./routes/chat.routes.js";
 import connectToMongoDB from "./lib/connectToMongoDB.js";
 import cookieParser from "cookie-parser";
 import cors from "cors";
-import { Server } from "socket.io";
-import http from "http";
+import { app, server } from "./lib/socket.js";
 
 dotenv.config();
-const app = express();
-const server = http.createServer(app);
-const io = new Server(server, {
-  cors: {
-    origin: "http://localhost:5173",
-    credentials: true,
-  },
-});
+
 const PORT = process.env.PORT;
 
 app.use(express.json({limit: '2mb'})); // to parse json data
@@ -33,21 +25,7 @@ app.use("/api/user", userRoutes);
 app.use("/api/messages", messageRoutes);
 app.use("/api/chat", chatRoutes);
 
-app.get("/", (req, res) => {
-  res.send("Hello World!!");
-});
-
-io.on("connection", (socket) => {
-  console.log("New client connected");
-
-  socket.on("disconnect", () => {
-    console.log("Client disconnected");
-  });
-});
-
 server.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)
   connectToMongoDB();
 });
-
-export { io };

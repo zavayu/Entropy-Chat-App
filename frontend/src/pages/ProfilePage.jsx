@@ -37,7 +37,6 @@ const ProfilePage = () => {
 
         {/* Profile Information */}
         <main className="justify-self-center justify-center items-center p-32">
-          {/* TODO: Implement Upload Picture */}
           <button
             className="transition-transform transform hover:scale-[104%] rounded-full "
             onClick={handleButtonClick}
