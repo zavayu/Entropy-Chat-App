@@ -1,6 +1,26 @@
-# Entropy-Chat-App
+# **Entropy-Chat-App**
 
-This is a full-stack chat app created using React, Vite, TailwindCSS, MangoDB, Express, and Node.
+Entropy is a full-stack chat application created using the MERN stack.
 
+<img src="https://github.com/user-attachments/assets/15672619-3783-4d46-b32f-a0fc63e9c927" width="800">
 
-for emojis:     npm install --save emoji-mart @emoji-mart/data @emoji-mart/react
+### Frontend Technologies:
+- React
+- TailwindCSS
+- DaisyUI
+### Backend Technologies:
+- Node
+- Express
+- MongoDB
+- Bcrypt
+- JWT
+- Cloudinary
+- Socket.io
+### Features:
+- Real-time communication
+- User profiles
+- User authentication
+- Image upload
+- Emoji upload
+- Contacts
+- Theme Switching
