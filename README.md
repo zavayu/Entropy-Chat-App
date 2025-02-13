@@ -9,7 +9,7 @@ Entropy is a full-stack chat application created using the MERN stack.
 - TailwindCSS
 - DaisyUI
 ### Backend Technologies:
-- Node
+- Next.js
 - Express
 - MongoDB
 - Bcrypt
